@@ -24,15 +24,14 @@ DerivedData
 
 # Android/IntelliJ
 #
-build/
-.idea
-.gradle
-local.properties
-*.iml
-*.hprof
-.cxx/
-*.keystore
-!debug.keystore
+# Build directories
+ios/Pods/
+ios/build/
+ios/*.xcworkspace/
+android/.gradle/
+android/app/build/
+android/build/
+android/*.keystore
 
 # node.js
 #
@@ -58,6 +57,29 @@ yarn-error.log
 # Ruby / CocoaPods
 **/Pods/
 /vendor/bundle/
+
+# IDE specific files
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+*.log
+*.swp
+*.swo
+
+# Miscellaneous
+*.iml
+*.keystore
+*.apk
+*.ap_
+*.jar
+*.so
+*.dSYM
+*.xcf
+
+# Exclude android and ios specific build files
+android/app/debug.keystore
 
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check*
