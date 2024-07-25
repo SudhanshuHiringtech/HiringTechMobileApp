@@ -23,6 +23,40 @@ const Job = () => {
 
   const handleApply = (data) => {
     console.log('Filter Data:', data);
+
+    const handleApply = async (data) => {
+      console.log('Filter Data:', data);
+      const baseUrl = 'http://192.168.29.188:5000/filterjobs';
+  
+      // Construct query string from filters object
+      const queryString = new URLSearchParams(data).toString();
+  
+      // Full URL with query parameters
+      const url = `${baseUrl}?${queryString}`;
+  
+      try {
+        // Fetch request
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+  
+        // Parse JSON response
+        const jobs = await response.json();
+  
+        // Handle the filtered jobs data
+        console.log("Filtered jobs:", response.json());
+        setJobs(jobs);
+      } catch (error) {
+        console.error('Error fetching filtered jobs:', error);
+      }
+    };
     // Call your API or handle the filter data as needed
   };
 

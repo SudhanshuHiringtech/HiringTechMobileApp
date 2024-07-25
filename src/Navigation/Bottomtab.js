@@ -1,76 +1,70 @@
-import * as React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import * as React from 'react';
+import { View, Text,Image,StyleSheet} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSelector, useDispatch } from 'react-redux';
+import { setProfile, selectProfile } from "../Reduxtoolkit/profileSlice";
 
-import Home from "../Screen/BottomTabScreen/Home";
-import Toptab from "./Toptab";
-import Appleid from "../Screen/BottomTabScreen/Applied";
+import Home from '../Screen/BottomTabScreen/Home';
+import Toptab from './Toptab';
+import Appleid from "../Screen/BottomTabScreen/Applied"
 
-import Message from "../Screen/BottomTabScreen/Message";
+import Message from '../Screen/BottomTabScreen/Message';
+import HRJobsScreen from '../../HRScreens/HRJobsScreen';
 const Tab = createBottomTabNavigator();
 
-const Bottomtab = () => {
-    return (
-        <Tab.Navigator
-            screenOptions={{
-                headerShown: false,
-                tabBarStyle: styles.tabBarStyle,
-                tabBarItemStyle: styles.tabBarItemStyle,
-            }}
-            initialRouteName="Home">
-            <Tab.Screen
-                name="Home"
-                component={Home}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <View>
-                            <Image
-                                source={require("../Assets/home.png")}
-                                style={{
-                                    ...styles.imageStyle,
-                                    tintColor: focused ? "#D79442" : "#175574",
-                                }}
-                            />
-                        </View>
-                    ),
-                    tabBarLabel: ({ focused, color }) => (
-                        <Text
-                            style={[
-                                styles.text,
-                                { fontWeight: focused ? "bold" : "normal" },
-                            ]}>
-                            Dashboard
-                        </Text>
-                    ),
-                }}
+
+const Bottomtab = ()=> {
+
+  const profile = useSelector(selectProfile);
+  //console.log("DD", profile.profile.user.email)
+  const userdesignation = profile?.profile?.user?.userdesignation;
+  console.log("userDesignation",userdesignation)
+
+  return (
+    <Tab.Navigator screenOptions={{headerShown: false}} initialRouteName="Home">
+    <Tab.Screen name="Home" component={Home} 
+    options={{
+        tabBarIcon: ({focused}) => (
+          <View>
+            <Image
+              source={require('../Assets/home.png')}
+              style={{
+                ...styles.imageStyle,
+                tintColor: focused ? '#81402f' : '#175574',
+              }}
             />
-            <Tab.Screen
-                name="Job"
-                component={Toptab}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <View>
-                            <Image
-                                source={require("../Assets/jobs.png")}
-                                style={{
-                                    ...styles.imageStyle,
-                                    tintColor: focused ? "#D79442" : "#175574",
-                                }}
-                            />
-                        </View>
-                    ),
-                    tabBarLabel: ({ focused, color }) => (
-                        <Text
-                            style={[
-                                styles.text,
-                                { fontWeight: focused ? "bold" : "normal" },
-                            ]}>
-                            Jobs
-                        </Text>
-                    ),
-                }}
+          </View>
+        ),
+        tabBarLabel: ({focused, color}) => (
+          <Text
+            style={{color: focused ? '#81402f' : '#175574'}}>
+            Dashboard
+          </Text>
+        ),
+      }}
+    />
+    <Tab.Screen name="Job" component={ userdesignation == 'recuriter' ? HRJobsScreen : Toptab }
+    options={{
+        tabBarIcon: ({focused}) => (
+          <View>
+            <Image
+              source={require('../Assets/jobs.png')}
+              style={{
+                ...styles.imageStyle,
+                tintColor: focused ? '#81402f' : '#175574',
+              }}
             />
+          </View>
+        ),
+        tabBarLabel: ({focused, color}) => (
+          <Text
+            style={{color: focused ? '#81402f' : '#175574'}}>
+            jobs
+          </Text>
+        ),
+      }}
+    />
 
             <Tab.Screen
                 name="Appleid"
