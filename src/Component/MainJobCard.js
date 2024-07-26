@@ -115,7 +115,7 @@ const MainJobCard = ({ job , HRJobDescription, descriptionOpen}) => {
             {/* <Text style={styles.time}>{timeElapsed}</Text> */}
         </View>
         {descriptionOpen != true ? (
-        <><TouchableOpacity style={styles.viewButton} onPress={() =>  navigation.navigate('JobDetails', { job: job })  }>
+        <><TouchableOpacity style={styles.viewButton} onPress={() =>  navigation.navigate('JobDetails', { job: job , HRCandidate: false})  }>
             <Text style={styles.button2}>View Details</Text>
           </TouchableOpacity>
           { role == 'candidate' ? (
