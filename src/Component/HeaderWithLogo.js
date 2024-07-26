@@ -25,7 +25,7 @@ const HeaderWithLogo = ({ imageSource, text, image }) => {
                         navigation.openDrawer();
                     }}>
                     <Image
-                        source={require("../Assets/dashboard/profile.png")}
+                        source={require("../Assets/dashboard/Profile.png")}
                         style={styles.profileImage}
                     />
                 </TouchableOpacity>

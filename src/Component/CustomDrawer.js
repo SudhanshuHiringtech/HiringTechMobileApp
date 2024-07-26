@@ -80,7 +80,7 @@ const CustomDrawer = (props) => {
 
                 <View style={styles.profileContainer}>
                     <Image
-                        source={require("../Assets/dashboard/profile.png")}
+                        source={require("../Assets/dashboard/Profile.png")}
                         style={styles.profileImage}
                         resizeMode="contain"
                     />

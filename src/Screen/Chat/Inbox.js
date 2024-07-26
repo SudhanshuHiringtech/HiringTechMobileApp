@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity , Image} from 'react-native';
-// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // import { faPaperclip, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
 const ChatScreen = () => {
@@ -19,6 +19,19 @@ const ChatScreen = () => {
     }
   };
 
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileSelection = async () => {
+    try {
+      const result = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles],
+      });
+
+      setSelectedFile(result);
+    } catch (err) {
+      console.warn(err);
+    }
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Chat with us!</Text>
@@ -36,18 +49,18 @@ const ChatScreen = () => {
         ))}
       </View>
       <View style={styles.inputContainer}>
-        <TouchableOpacity style={styles.attachmentButton}>
-          {/* <FontAwesomeIcon icon={faPaperclip} size={16} color="#777" /> */}
-        </TouchableOpacity>
         <TextInput
           style={styles.input}
           placeholder="Write a message"
           value={message}
           onChangeText={setMessage}
         />
-        <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-          {/* <FontAwesomeIcon icon={faPaperPlane} size={16} color="#fff" /> */}
-          {/* <Image source={require("../../Assets/Group.png")}  /> */}
+         <TouchableOpacity style={styles.attachmentButton}  onPress={handleFileSelection}>
+         {selectedFile && <Text>Selected File: {selectedFile.name}</Text>}
+          <Icon name="paperclip" size={24} color="#333" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={sendMessage}>
+          <Icon name="send" size={30}/>
         </TouchableOpacity>
       </View>
     </View>
