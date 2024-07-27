@@ -20,7 +20,7 @@ export default function Profile({ navigation }) {
   console.log(profile)
   const fetchProfile = async () => {
     try {
-      const response = await fetch('https://hiringtechb-2.onrender.com/updateprofile', {
+      const response = await fetch('http://192.168.29.188:5000/updateprofile', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
