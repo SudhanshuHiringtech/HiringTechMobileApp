@@ -1,10 +1,25 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { View, Image, TouchableOpacity, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Logo from "../Assets/dashboard/Logo";
+import { useSelector, useDispatch } from "react-redux";
+import { clearProfile, selectProfile } from "../Reduxtoolkit/profileSlice";
 
 const HeaderWithLogo = ({ imageSource, text, image }) => {
     const navigation = useNavigation();
+    const profile = useSelector(selectProfile);
+
+    const [images, setImages] = useState(profile?.profile?.user?.profileImage?.data ? `data:${profile.profile.user.profileImage.contentType};base64,${profile.profile.user.profileImage.data}` : null);
+
+
+    useEffect(() => {
+        if (profile?.profile?.user?.profileImage?.data) {
+          setImages(`data:${profile.profile.user.profileImage.contentType};base64,${profile.profile.user.profileImage.data}`);
+        }
+      }, []);
+
+
+
     return (
         <View style={styles.header}>
             {image == false ? (
@@ -24,10 +39,18 @@ const HeaderWithLogo = ({ imageSource, text, image }) => {
                     onPress={() => {
                         navigation.openDrawer();
                     }}>
-                    <Image
-                        source={require("../Assets/dashboard/profile.png")}
+                     {images ? (<Image
+                        source={require("../Assets/dashboard/Profile.png")}
                         style={styles.profileImage}
-                    />
+                        resizeMode="contain"
+                    />) :(
+                    <Image
+                    style={styles.profileImage}
+                    resizeMode="contain"
+                    source={{
+                    uri: images,
+                    }}
+                    />)}
                 </TouchableOpacity>
             </View>
         </View>
@@ -73,7 +96,6 @@ const styles = {
         height: 40,
         borderRadius: 20,
         resizeMode: "cover",
-        backgroundColor: "#c8c3fd",
     },
     headerText: {
         fontSize: 18,

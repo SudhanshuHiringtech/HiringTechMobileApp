@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import MainJobCard from '../Component/MainJobCard';
 import { WebView } from 'react-native-webview';
@@ -15,8 +15,8 @@ const JobDetailsScreen = ({ route, navigation }) => {
   const job = route.params.job;
   const HRJobDescription = route.params.HRJobDescription;
   const HRCandidate = route.params.HRCandidate;
-  const [jobStatus, setJobStatus] = useState(route.params.jobStatus)
-  console.log("ds", HRCandidate)
+  const [jobStatus, setJobStatus] = useState(route.params.job.jobStatus)
+  console.log("ds",route.params.job.jobStatus)
 
   const [webViewHeight, setWebViewHeight] = useState(0);
 
@@ -121,10 +121,38 @@ const JobDetailsScreen = ({ route, navigation }) => {
     clicks: { count: 389, change: 44 },
     applications: { count: 200, change: 42 }
   });
+  console.log(HRCandidate , "dekh lere bhai tu ", role)
+
+
+  async function ChangeJobStatus() {
+    
+    try{ 
+      const response = await fetch(`http://192.168.29.188:5000/jobstatus/${jobId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({jobStatus}),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      Alert.alert('Job Statused');
+    } else {
+      console.error('falied to change Status', JSON.stringify(data.error));
+    }
+  } catch (error) {
+    console.error('Error during Stauschange:', error.toString());
+  }
+};
+
+  useEffect(() =>{
+        ChangeJobStatus()
+  },[jobStatus])
  
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {(HRCandidate === true || HRCandidate == undefined && role === 'recruiter' ) ? (
+      {HRCandidate === true && role === 'recuriter' ? (
         <View style={{height:'38%',}}>
           <View style={{height:'8%'}}>
             <HeaderWithLogo 
@@ -137,21 +165,18 @@ const JobDetailsScreen = ({ route, navigation }) => {
         containerStyle={{borderRadius:30}}
         placeholderStyle={{color:'black'}}
         selectedTextStyle={{color:'black'}}
-        data={
-          [
-    { label: 'open', value: '1' },
-    { label: 'closed', value: '2' },
-  ]
-        }
+        data={[
+          { label: 'open', value: '1' },
+          { label: 'closed', value: '2' },
+        ]}
         labelField="label"
-       // valueField="value"
+        // valueField="value"
         placeholder="Select item"
         value={jobStatus}
         onChange={item => {
-          setJobStatus(item.value);
+          setJobStatus(item.label);
         }}
       />
-          {/* </View> */}
           <View style={{marginLeft:12}}>
             <Text style={styles.jobTitle}>UX/UI Intern</Text>
             <Text style={styles.companyInfo}>Accenture in India - Remote</Text>
@@ -169,7 +194,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
               </View>
               <View>
                 <Text>0</Text>
-                <Text>Awating   {"\n"} review</Text>
+                <Text>Awaiting{"\n"} review</Text>
               </View>
               <View>
                 <Text>0</Text>
@@ -185,23 +210,22 @@ const JobDetailsScreen = ({ route, navigation }) => {
             <View style={styles.analyticsCard}>
               <Text>{analytics.impressions.count}</Text>
               <Text style={styles.textStyle}>Job Impressions</Text>
-              <Text>{analytics.impressions.change}% {analytics.impressions.change > 0 ? 'more' : 'less'} as usual</Text>
+              <Text>{analytics.impressions.change}% {analytics.impressions.change > 0 ? 'more' : 'less'} than usual</Text>
             </View>
             <View style={styles.analyticsCard}>
               <Text>{analytics.clickThroughRate.rate}%</Text>
               <Text style={styles.textStyle}>Click Through Rate</Text>
-              <Text>{analytics.clickThroughRate.change}% {analytics.clickThroughRate.change > 0 ? 'more' : 'less'} as usual</Text>
+              <Text>{analytics.clickThroughRate.change}% {analytics.clickThroughRate.change > 0 ? 'more' : 'less'} than usual</Text>
             </View>
             <View style={styles.analyticsCard}>
-              
               <Text>{analytics.clicks.count}</Text>
               <Text style={styles.textStyle}>Clicks</Text>
-              <Text>{analytics.clicks.change}% {analytics.clicks.change > 0 ? 'more' : 'less'} as usual</Text>
+              <Text>{analytics.clicks.change}% {analytics.clicks.change > 0 ? 'more' : 'less'} than usual</Text>
             </View>
             <View style={styles.analyticsCard}>
               <Text>{analytics.applications.count}</Text>
               <Text style={styles.textStyle}>Applications</Text>
-              <Text>{analytics.applications.change}% {analytics.applications.change > 0 ? 'more' : 'less'} as usual</Text>
+              <Text>{analytics.applications.change}% {analytics.applications.change > 0 ? 'more' : 'less'} than usual</Text>
             </View>
           </View>
         </View>
@@ -247,7 +271,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
             ➼ {skill}
           </Text>
         ))}
-
+  
         {jobDetail?.questions?.map((q) => (
           <View key={q.questionId} style={styles.questionContainer}>
             <Text style={styles.questionInput}>{q.question}</Text>
@@ -267,7 +291,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
           </View>
         ))}
         <View style={styles.applyButtonContainer}>
-          {role == 'candidate' ? (
+          {role === 'candidate' ? (
             <TouchableOpacity style={styles.applyButton} onPress={ApplyforJob} disabled={isButtonDisabled}>
               {isButtonDisabled ? (<Text style={styles.buttonText}>Applied</Text>) : (<Text style={styles.buttonText}>Apply</Text>)}
             </TouchableOpacity>
@@ -280,6 +304,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
       </View>
     </ScrollView>
   );
+  
 };
 
 const styles = StyleSheet.create({

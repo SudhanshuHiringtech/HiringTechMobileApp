@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { useNavigation } from "@react-navigation/native";
@@ -40,7 +40,16 @@ const CustomDrawer = (props) => {
     const name = profile?.profile?.user?.name;
     const email = profile?.profile?.user?.email;
     const role = profile?.profile?.user?.userdesignation;
+    const [image, setImage] = useState(profile?.profile?.user?.profileImage?.data ? `data:${profile.profile.user.profileImage.contentType};base64,${profile.profile.user.profileImage.data}` : null);
 
+
+    useEffect(() => {
+        if (profile?.profile?.user?.profileImage?.data) {
+          setImage(`data:${profile.profile.user.profileImage.contentType};base64,${profile.profile.user.profileImage.data}`);
+        }
+      }, []);
+
+      console.log(image)
     const drawerItems = [
         { label: "My Profile", screen: "Profile" },
         { label: "Manage Account", screen: null },
@@ -79,11 +88,18 @@ const CustomDrawer = (props) => {
                 </TouchableOpacity>
 
                 <View style={styles.profileContainer}>
-                    <Image
-                        source={require("../Assets/dashboard/profile.png")}
+                   {image ? (<Image
+                        source={require("../Assets/dashboard/Profile.png")}
                         style={styles.profileImage}
                         resizeMode="contain"
-                    />
+                    />) :(
+                    <Image
+                    style={styles.profileImage}
+                    resizeMode="contain"
+                    source={{
+                    uri: image,
+                    }}
+                    />)}
                     <Text style={styles.profileName}>{name}</Text>
                     <Text style={styles.profileEmail}>{email}</Text>
                 </View>
@@ -136,7 +152,7 @@ const styles = StyleSheet.create({
         width: 70,
         height: 70,
         marginBottom: 10,
-        backgroundColor: "#c8c3fd",
+        //backgroundColor: "#c8c3fd",
         borderRadius: 50,
     },
     profileName: {

@@ -6,29 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setProfile, selectProfile } from "../Reduxtoolkit/profileSlice";
 
 
-const JobCard = ({ cardType, cardStyles, data, onPress, HRCandidate }) => {
-  const navigation = useNavigation() 
-   console.log(data);
-
-   const profile = useSelector(selectProfile);
-   //console.log("DD", profile.profile.user.email)
-   const userdesignation = profile?.profile?.user?.userdesignation;
-
-  return (
-    <TouchableOpacity style={[styles.card, cardStyles]} onPress={() => {navigation.navigate('JobDetails', {job:data, HRCandidate:HRCandidate})}}>
-      <View style={styles.rowSpaceBetween}>
-        <View style={styles.rowCenter}>
-          <Image source={require("../Assets/dashboard/Mask.png")} style={styles.avatar} />
-          {cardType === 'featured' ? (
-            // <Text style={styles.vacantLandText}>Vacant Land</Text>
-            <View style={styles.textContainer}>
-            <Text style={styles.titleText0}>{data.jobTitle}</Text>
-            <Text style={styles.vacantLandText}>{`${data.company} · ${data.location}`}</Text>
-          </View>
-          ) : (
-            <View style={styles.textContainer}>
-              <Text style={styles.titleText}>{data.jobTitle}</Text>
-              <Text style={styles.vacantLandText}>{`${data.company} · ${data.location}`}</Text>
 const JobHeader = ({ data, cardType }) => (
     <View style={styles.headerContainer}>
         <View style={styles.header}>
@@ -49,7 +26,7 @@ const JobHeader = ({ data, cardType }) => (
                     style={[
                         styles.companyLocation,
                         cardType === "featured" && {
-                            color: "black",
+                            color:  "#175574",
                             fontSize: 14,
                             fontWeight: "500",
                         },
@@ -88,7 +65,7 @@ const JobTags = ({ data }) => (
     </View>
 );
 
-const JobCard = ({ cardType, cardStyles, data, onPress }) => {
+const JobCard = ({ cardType, cardStyles, data, onPress, HRCandidate }) => {
     const navigation = useNavigation();
     console.log(data);
 
@@ -96,7 +73,7 @@ const JobCard = ({ cardType, cardStyles, data, onPress }) => {
         <TouchableOpacity
             style={[styles.container, cardStyles]}
             onPress={() => {
-                navigation.navigate("JobDetails", { job: data });
+                navigation.navigate("JobDetails", { job: data, HRCandidate:HRCandidate});
             }}>
             <JobHeader data={data} cardType={cardType} />
             <View style={styles.bodyContainer}>

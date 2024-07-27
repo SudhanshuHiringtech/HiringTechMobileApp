@@ -72,7 +72,7 @@ const Home = () => {
             const pro = await AsyncStorage.getItem("Profile");
             const profile = JSON.parse(pro);
             setProfile(profile);
-            console.log("Designation", profile?.user?.userdesignation);
+          //  console.log("Designation", profile?.user?.userdesignation);
             setCheckStatus(profile?.user?.userdesignation);
             const data = await response.json();
             // console.log('Data received:', data);
