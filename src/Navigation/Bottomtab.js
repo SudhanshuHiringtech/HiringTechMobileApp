@@ -81,7 +81,8 @@ const Bottomtab = ()=> {
                             />
                         </View>
                     ),
-                    tabBarLabel: ({ focused, color }) => (
+                    tabBarLabel: ({ focused, color }) => ( 
+                        
                         <Text
                             style={[
                                 styles.text,
@@ -91,6 +92,33 @@ const Bottomtab = ()=> {
                         </Text>
                     ),
                 }}
+            />
+            <Tab.Screen 
+            name="Candidates"
+            component={Candidates}
+            options={{
+                tabBarIcon: ({ focused }) => (
+                    <View>
+                        <Image
+                            source={require("../Assets/Applied.png")}
+                            style={{
+                                ...styles.imageStyle,
+                                tintColor: focused ? "#D79442" : "#175574",
+                            }}
+                        />
+                    </View>
+                ),
+                tabBarLabel: ({ focused, color }) => ( 
+                    
+                    <Text
+                        style={[
+                            styles.text,
+                            { fontWeight: focused ? "bold" : "normal" },
+                        ]}>
+                        Candidates
+                    </Text>
+                ),
+            }}
             />
 
             <Tab.Screen

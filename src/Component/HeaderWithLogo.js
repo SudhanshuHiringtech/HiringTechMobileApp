@@ -40,6 +40,7 @@ const HeaderWithLogo = ({ imageSource, text, image }) => {
                         navigation.openDrawer();
                     }}>
                      {images ? (<Image
+
                         source={require("../Assets/dashboard/Profile.png")}
                         style={styles.profileImage}
                         resizeMode="contain"

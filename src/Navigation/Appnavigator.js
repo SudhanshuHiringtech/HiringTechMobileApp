@@ -1,3 +1,4 @@
+  // navigation
 import React,{useEffect,useState} from 'react';
 import { View, Text } from 'react-native';
 
@@ -38,7 +39,6 @@ import CreateJobScreen2 from '../Screen/HRJobCreateSection/CreateJobScreen2';
 import CreateJobDescriptionScreen from '../Screen/HRJobCreateSection/CreateJobDescriptionScreen'
 import CreateJobScreen4 from '../Screen/HRJobCreateSection/CreateJobScreen4';
 import CreateJobScreen5 from '../Screen/HRJobCreateSection/CreateJobScreen5';
-import HRJobsScreen from '../../HRScreens/HRJobsScreen';
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = ()=> {
@@ -60,9 +60,6 @@ const AppNavigator = ()=> {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="CandidateRegistration" component={CandidateRegistration} />
       <Stack.Screen name="HrRegistration" component={HrRegistration} />
-
-  
-
       <Stack.Screen name="Bottomtab" component={Bottomtab} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="Otp" component={Otp} />
@@ -84,7 +81,6 @@ const AppNavigator = ()=> {
       <Stack.Screen name="Education" component={Education} />
       <Stack.Screen name="WorkExperience" component={WorkExperience} />
       <Stack.Screen name="JobDetails" component={JobDetailsScreen} />
-      <Stack.Screen name="HRJobs" component={HRJobsScreen} />
       </Stack.Navigator>
   )
 

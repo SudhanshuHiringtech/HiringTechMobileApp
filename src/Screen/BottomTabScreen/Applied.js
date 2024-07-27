@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import { useSelector } from 'react-redux';
 import { selectProfile } from "../../Reduxtoolkit/profileSlice";
-
 import HeaderWithLogo from "../../Component/HeaderWithLogo";
 import AppliedJobsCard from "../../Component/AppliedJobsCard";
 import AppliedJobsFilter from "../../Component/AppliedJobsFilter";
