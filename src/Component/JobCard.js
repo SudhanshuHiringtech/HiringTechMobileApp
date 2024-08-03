@@ -25,7 +25,7 @@ const JobHeader = ({ data, cardType }) => (
                     style={[
                         styles.companyLocation,
                         cardType === "featured" && {
-                            color: "black",
+                            color:  "#175574",
                             fontSize: 14,
                             fontWeight: "500",
                         },
@@ -64,7 +64,7 @@ const JobTags = ({ data }) => (
     </View>
 );
 
-const JobCard = ({ cardType, cardStyles, data, onPress }) => {
+const JobCard = ({ cardType, cardStyles, data, onPress, HRCandidate }) => {
     const navigation = useNavigation();
     console.log(data);
 
@@ -72,7 +72,7 @@ const JobCard = ({ cardType, cardStyles, data, onPress }) => {
         <TouchableOpacity
             style={[styles.container, cardStyles]}
             onPress={() => {
-                navigation.navigate("JobDetails", { job: data });
+                navigation.navigate("JobDetails", { job: data, HRCandidate:HRCandidate});
             }}>
             <JobHeader data={data} cardType={cardType} />
             <View style={styles.bodyContainer}>

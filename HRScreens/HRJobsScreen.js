@@ -30,6 +30,7 @@ const HRJobsScreen = () => {
     fetchJobs();
   }, [section]);
 
+  console.log("Sfrrf", HRCandidate)
   return (
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <View style={{ height: '8%', alignItems: 'center' }}>
