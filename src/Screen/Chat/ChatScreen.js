@@ -60,7 +60,7 @@ const ChatScreen = () => {
           <Icon name="paperclip" size={24} color="#333" />
         </TouchableOpacity>
         <TouchableOpacity onPress={sendMessage}>
-          <Icon name="send" size={30}/>
+          <Icon  name="send" size={30}/>
         </TouchableOpacity>
       </View>
     </View>
@@ -94,9 +94,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   userMessage: {
-    backgroundColor: '#0080ff',
+    backgroundColor: '#25D366',
     alignSelf: 'flex-end',
-    color: '#fff',
   },
   messageText: {
     fontSize: 16,

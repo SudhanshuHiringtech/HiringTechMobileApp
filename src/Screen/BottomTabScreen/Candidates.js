@@ -3,6 +3,38 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { PermissionsAndroid } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
+// import ScheduleInterview from '../InterviewScreen/ScheduleInterview'
+
+const candidates = [
+{
+    name: 'Jatin Kumar',
+    title: 'UX/UI Intern',
+    experience: '3 Months Exp',
+    skills: '8 of 10 skills matching',
+    downloade:'Download resume'
+  },
+  {
+    name: 'Jatin Kumar',
+    title: 'UX/UI Intern',
+    experience: '3 Months Exp',
+    skills: '8 of 10 skills matching',
+    downloade:'Download resume'
+  },{
+    name: 'Jatin Kumar',
+    title: 'UX/UI Intern',
+    experience: '3 Months Exp',
+    skills: '8 of 10 skills matching',
+    downloade:'Download resume'
+  },
+];
+
+const Candidate = ({ navigation }) => {
+  const [activeTab, setActiveTab] = useState('Applied');
+  const tabs = ['Applied', 'Reviewed', 'Contacting', 'Shortlist'];
+    const handleTabPress = (tab) => {
+      setActiveTab(tab);
+    };
+// start here......................................card
 
 const CandidateCard = ({ name, title, experience, skills, downloade, onPress }) => {
 
@@ -50,6 +82,12 @@ const CandidateCard = ({ name, title, experience, skills, downloade, onPress }) 
     }
   }
 
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
      <View style={styles.head}>
@@ -57,10 +95,26 @@ const CandidateCard = ({ name, title, experience, skills, downloade, onPress }) 
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.title}>{title}</Text>
       </View>
-      <View style={styles.right}>
-        {/* <Text style={styles.dots}>...</Text> */}
-        <Icon name="dots-three-vertical" size={16} color="#999" />
-      </View>
+
+{/* Droupdown here start */}
+
+  <View style={styles.ContainerDrop}>
+      <TouchableOpacity onPress={handleDropdown} style={styles.threeDots}>
+        <Icon style={styles.dots} name="dots-vertical" color="#999" />
+      </TouchableOpacity>
+
+      {showDropdown && (
+        <View style={styles.dropdown} >
+          <Text style={styles.dropdownItem}  onPress={() => navigation.navigate('ScheduleInterview') }>Schedule Interview</Text>
+          <Text style={styles.dropdownItem}>Shortlisting</Text>
+          <Text style={styles.dropdownItem}>Hired</Text>
+          <Text style={styles.dropdownItem}>Reject</Text>
+        </View>
+      )}
+    </View>
+
+    {/* Dropdown end here */}
+
      </View>
       <View style={styles.details}>
         <View style={styles.detail}>
@@ -81,35 +135,10 @@ const CandidateCard = ({ name, title, experience, skills, downloade, onPress }) 
   );
 };
 
-const candidates = [
-{
-    name: 'Jatin Kumar',
-    title: 'UX/UI Intern',
-    experience: '3 Months Exp',
-    skills: '8 of 10 skills matching',
-    downloade:'Download resume'
-  },
-  {
-    name: 'Jatin Kumar',
-    title: 'UX/UI Intern',
-    experience: '3 Months Exp',
-    skills: '8 of 10 skills matching',
-    downloade:'Download resume'
-  },{
-    name: 'Jatin Kumar',
-    title: 'UX/UI Intern',
-    experience: '3 Months Exp',
-    skills: '8 of 10 skills matching',
-    downloade:'Download resume'
-  },
-];
 
-const App = () => {
-  const [activeTab, setActiveTab] = useState('Applied');
-  const tabs = ['Applied', 'Reviewed', 'Contacting', 'Shortlist'];
-    const handleTabPress = (tab) => {
-      setActiveTab(tab);
-    };
+
+
+
 
 
 
@@ -178,7 +207,6 @@ const styles = StyleSheet.create({
   },
   profile: {
     marginBottom: 8,
-    // color:'navy',
   },
 right:{
   flexDirection:'row',
@@ -186,14 +214,6 @@ right:{
   width:100,
   justifyContent:'space-around',
   },
-  // dots:{
-  //   width:20,
-  //   height:20,
-  //   borderWidth:1,
-  //   borderRadius:20,
-  //   textAlign:'center',
-  //   alignItems:'center',
-  // },
   name: {
     fontWeight: 'bold',
     fontSize: 16,
@@ -206,19 +226,50 @@ right:{
     color:'#175574',
   },
   details: {
-    // flexDirection: 'row',
     justifyContent: 'space-between',
     
   },
   detail: {
     flexDirection: 'row',
-    // alignItems: 'center',
   },
   detailText: {
     fontSize: 14,
     marginLeft: 4,
     color:'#175574',
   },
+
+  ContainerDrop: {
+    // flex: 1,
+    justifyContent: 'right',
+    alignItems: 'center',
+  },
+  threeDots: {
+    backgroundColor: '#fff',
+    borderRadius:20,
+    borderWidth:1,
+    borderColor:'#ABE0F8',
+    // elevation: 5,
+    padding:2,
+  },
+  dots: {
+    fontSize: 20,
+  },
+  dropdown: {
+    position: 'absolute',
+    zIndex:1,
+    right: 32,
+    width:150,
+    top:-10,
+    backgroundColor: '#fff',
+    padding: 5,
+    elevation: 3,
+    borderRadius:10,
+  },
+  dropdownItem: {
+    padding: 5,
+    color:'#175574',
+  },
+
 });
 
-export default App;
+export default Candidate;

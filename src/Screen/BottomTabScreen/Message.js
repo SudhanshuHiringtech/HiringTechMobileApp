@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
-import Inbox from '../Chat/Inbox';
+
 
 const Messages = ({ navigation }) => {
   const [messages, setMessages] = useState([
@@ -28,7 +28,6 @@ const Messages = ({ navigation }) => {
   const [allButtonColor, setAllButtonColor] = useState('#fff');
   const [unreadButtonColor, setUnreadButtonColor] = useState('#fff');
   const [unread, unreadCount] = useState(0)
-  // const [filter, setFilter] = useState('all');
   const filteredMessages = filter === 'all' ? messages : messages.filter((message) => message.unread);
 
   const handleFilterChange = (newFilter) => {
@@ -46,7 +45,7 @@ const Messages = ({ navigation }) => {
   const renderItem = ({ item }) => (
     
     <TouchableOpacity
-     style={[styles.messageContainer]}onPress={() => navigation.navigate('Inbox')} >
+     style={[styles.messageContainer]}onPress={() => navigation.navigate('ChatScreen')} >
       <View style={styles.senderInfo}>
         <Image source={require("../../Assets/dashboard/Mask.png")} style={styles.senderImage} />
         <Text style={styles.senderName}>{item.sender}</Text>
