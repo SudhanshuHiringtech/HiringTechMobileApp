@@ -1,52 +1,49 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MapView, { Marker } from 'react-native-maps';
+// import { useGoogleCalendar } from './useGoogleCalendar'; // Custom hook to integrate with Google Calendar API
 
 const ScheduleInterview = () => {
-  // State variables
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [showCalendarDropdown, setShowCalendarDropdown] = useState(false);
   const [showGuestsModal, setShowGuestsModal] = useState(false);
   const [showMapModal, setShowMapModal] = useState(false);
   const [guests, setGuests] = useState([]);
+  const [location, setLocation] = useState(null);
+  const [notificationTime, setNotificationTime] = useState(10);
 
   // const { createGoogleMeetLink } = useGoogleCalendar();
 
-  // Handle date press
   const handleDatePress = (date) => {
     setSelectedDate(date);
     setShowCalendarDropdown(false);
   };
 
-  // Handle time slot press
   const handleTimeSlotPress = (timeSlot) => {
     setSelectedTimeSlot(timeSlot);
     setShowCalendarDropdown(false);
   };
 
-  // Handle reset
   const handleReset = () => {
     setSelectedDate(new Date());
     setSelectedTimeSlot(null);
   };
 
-  // Handle add guest
   const handleAddGuest = (guest) => {
     setGuests((prevGuests) => [...prevGuests, guest]);
   };
 
-  // Handle remove guest
   const handleRemoveGuest = (guest) => {
     setGuests((prevGuests) => prevGuests.filter((g) => g !== guest));
   };
 
-  // Handle location press
   const handleLocationPress = () => {
     setShowMapModal(true);
   };
 
-  // Handle save
   const handleSave = () => {
     if (selectedDate && selectedTimeSlot) {
       const startTime = new Date(selectedDate);
@@ -71,7 +68,6 @@ const ScheduleInterview = () => {
     }
   };
 
-  // Render calendar dropdown
   const renderCalendarDropdown = () => {
     const currentMonth = selectedDate.getMonth();
     const currentYear = selectedDate.getFullYear();
@@ -135,7 +131,6 @@ const ScheduleInterview = () => {
     );
   };
 
-  // Render guests modal
   const renderGuestsModal = () => {
     const allGuests = [
       'Guest 1',
@@ -172,13 +167,22 @@ const ScheduleInterview = () => {
     );
   };
 
-  // Render map modal
   const renderMapModal = () => {
     return (
       <Modal visible={showMapModal} transparent={true} animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.mapContainer}>
-          
+            <MapView
+              style={styles.map}
+              initialRegion={{
+                latitude: location ? location.latitude : 37.78825,
+                longitude: location ? location.longitude : -122.4324,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+            >
+              {location && <Marker coordinate={location} />}
+            </MapView>
             <TouchableOpacity style={styles.closeButton} onPress={() => setShowMapModal(false)}>
               <Text style={styles.closeButtonText}>Close</Text>
             </TouchableOpacity>
