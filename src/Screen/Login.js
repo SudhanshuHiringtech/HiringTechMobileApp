@@ -106,6 +106,9 @@ const Login = ({route}) =>{
 
                 />
             </View>
+                <View style={styles.ForgotPassword} >
+                    <Text>Forgotten Password</Text>
+                </View>
 
             <View style={[styles.rememberViewStyle]}>
                 <Image
@@ -113,7 +116,7 @@ const Login = ({route}) =>{
                 style={[styles.ImageStyle]}
                 />
                 <Text style={[styles.rememberTextStyle]}>
-                Remember Me
+                Remember Me 
                 </Text>
             </View>
 
@@ -308,6 +311,16 @@ const styles = StyleSheet.create({
         fontWeight:'500',
         color:'black',
         marginLeft:12,
+    },
+    ForgotPassword:{
+        fontSize:14,
+        fontWeight:'500',
+        color:'black',
+        marginLeft:30,
+        marginTop:10,
+        fontSize:14,
+        fontWeight:'500',
+        cursor: 'pointer',
     }
   });
 export default Login;
