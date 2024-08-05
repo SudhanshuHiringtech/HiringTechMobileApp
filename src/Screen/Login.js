@@ -35,7 +35,7 @@ const Login = ({route}) =>{
         dispatch(setProfile(data));
       await AsyncStorage.setItem("token", data.token);
       await AsyncStorage.setItem('isLoggedIn',  JSON.stringify(true));
-
+     console.log(data)
      await AsyncStorage.setItem('Profile', JSON.stringify(data));
         navigation.navigate('Bottomtab');
         Alert.alert('Login Successful', `Welcome`);

@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import HeaderWithLogo from '../../Component/HeaderWithLogo';
 
 const CreateJobScreen2 = ({ navigation, route }) => {
-  const [jobDetails, setJobDetails] = useState({});
-  const [minPay, setMinPay] = useState('');
-  const [maxPay, setMaxPay] = useState('');
-  const [rate, setRate] = useState('');
-  const [selectedIncentives, setSelectedIncentives] = useState([]);
-  const [selectedBenefits, setSelectedBenefits] = useState([]);
+  const jobDetail = route?.params?.jobDetail || {};
 
-  const incentives = ['Yearly bonus', 'Stock options', 'Bonus opportunities', 'Overtime pay', 'Other'];
-  const benefits = ['Health insurance', 'Referral program', 'Relocation assistance', 'Retirement plan', 'Parental leave'];
+  const [jobDetails, setJobDetails] = useState(jobDetail);
+  const [minPay, setMinPay] = useState(jobDetail.minPay || '');
+  const [maxPay, setMaxPay] = useState(jobDetail.maxPay || '');
+  const [rate, setRate] = useState(jobDetail.salaryYearlyOrMonthly || '');
+  const [selectedIncentives, setSelectedIncentives] = useState(jobDetail.incentivesAndPerks || []);
+  const [selectedBenefits, setSelectedBenefits] = useState(jobDetail.benefits || []);
+  const [customIncentive, setCustomIncentive] = useState('');
+  const [customBenefits, setCustomBenefits] = useState('');
+
+  const [incentives, setIncentives] = useState(['Yearly bonus', 'Stock options', 'Bonus opportunities', 'Overtime pay', 'Other']);
+  const [benefits, setBenefits] = useState(['Health insurance', 'Referral program', 'Relocation assistance', 'Retirement plan', 'Parental leave']);
 
   const handleSelection = (item, list, setList) => {
     if (list.includes(item)) {
@@ -22,19 +26,36 @@ const CreateJobScreen2 = ({ navigation, route }) => {
     }
   };
 
-  const jobData = route.params.JobApplication;
-  console.log("data agya ", jobData);
-
-  const handleSubmit = () => {
-    setJobDetails({ ...jobData, minPay, maxPay, rate, selectedIncentives, selectedBenefits });
+  const handleCustomIncentiveSubmit = () => {
+    if (customIncentive) {
+      setSelectedIncentives([...selectedIncentives, customIncentive]);
+      setIncentives([...incentives, customIncentive]);
+      setCustomIncentive('');
+    }
+    console.log(selectedIncentives);
   };
 
-  useEffect(() => {
-    if (Object.keys(jobDetails).length > 0) {
-      console.log("Updated jobDetails: ", jobDetails);
-      navigation.navigate('CreateJobDescriptionScreen', { jobDetails });
+  const handleCustomBenefitsSubmit = () => {
+    if (customBenefits) {
+      setSelectedBenefits([...selectedBenefits, customBenefits]);
+      setBenefits([...benefits, customBenefits]);
+      setCustomBenefits('');
     }
-  }, [jobDetails]);
+    console.log(selectedBenefits);
+  };
+
+  const handleSubmit = () => {
+    const updatedJobDetails = {
+      ...jobDetails,
+      minPay,
+      maxPay,
+      rate,
+      selectedIncentives,
+      selectedBenefits,
+    };
+    console.log("Updated jobDetails: ", updatedJobDetails);
+    navigation.navigate('CreateJobDescriptionScreen', { jobDetails: updatedJobDetails });
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
@@ -49,23 +70,17 @@ const CreateJobScreen2 = ({ navigation, route }) => {
         <Text style={styles.header}>Add Pay & Benefits</Text>
 
         <View style={styles.dropdownContainer}>
-          <Dropdown
+          <TextInput
             style={styles.dropdown}
-            data={[{ label: '₹ 3 LPA', value: '₹ 3 LPA' }, { label: '₹ 4 LPA', value: '₹ 4 LPA' }]}
-            labelField="label"
-            valueField="value"
-            placeholder="Min"
+            placeholder="Min Salary"
             value={minPay}
-            onChange={item => setMinPay(item.value)}
+            onChangeText={setMinPay}
           />
-          <Dropdown
+          <TextInput
             style={styles.dropdown}
-            data={[{ label: '₹ 4 LPA', value: '₹ 4 LPA' }, { label: '₹ 5 LPA', value: '₹ 5 LPA' }]}
-            labelField="label"
-            valueField="value"
-            placeholder="Max"
+            placeholder="Max Salary"
             value={maxPay}
-            onChange={item => setMaxPay(item.value)}
+            onChangeText={setMaxPay}
           />
           <Dropdown
             style={styles.dropdown}
@@ -90,9 +105,21 @@ const CreateJobScreen2 = ({ navigation, route }) => {
               ]}
               onPress={() => handleSelection(item, selectedIncentives, setSelectedIncentives)}
             >
-              <Text style={styles.selectionText}> + {item}</Text>
+              <Text style={[
+                styles.selectionText,
+                selectedIncentives.includes(item) && styles.selectedText
+              ]}>
+                + {item}
+              </Text>
             </TouchableOpacity>
           ))}
+          <TextInput
+            style={styles.customInput}
+            placeholder="Enter the Incentive & Perks"
+            value={customIncentive}
+            onChangeText={setCustomIncentive}
+            onBlur={handleCustomIncentiveSubmit}
+          />
         </View>
 
         <Text style={styles.sectionHeader}>Benefits</Text>
@@ -107,12 +134,24 @@ const CreateJobScreen2 = ({ navigation, route }) => {
               ]}
               onPress={() => handleSelection(item, selectedBenefits, setSelectedBenefits)}
             >
-              <Text style={styles.selectionText}> +{item}</Text>
+              <Text style={[
+                styles.selectionText,
+                selectedBenefits.includes(item) && styles.selectedText
+              ]}>
+                + {item}
+              </Text>
             </TouchableOpacity>
           ))}
+          <TextInput
+            style={styles.customInput}
+            placeholder="Enter the Benefits"
+            value={customBenefits}
+            onChangeText={setCustomBenefits}
+            onBlur={handleCustomBenefitsSubmit}
+          />
         </View>
         <View style={{ height: '8%', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <TouchableOpacity style={styles.Backbutton} onPress={() => navigation.navigate('CreateJobScreen1')}>
+          <TouchableOpacity style={styles.Backbutton} onPress={() => navigation.navigate('CreateJobScreen1', { jobDetail })}>
             <Text style={styles.BackbuttonText}>Back</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleSubmit}>
@@ -178,6 +217,16 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: 'black',
   },
+  selectedText: {
+    color: 'white',
+  },
+  customInput: {
+    padding: 3,
+    borderWidth: 1.5,
+    borderColor: 'skyblue',
+    borderRadius: 20,
+    margin: 5,
+  },
   button: {
     backgroundColor: '#FFA500',
     padding: 15,
@@ -186,7 +235,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   Backbutton: {
-    // backgroundColor: '#FFA500',
     padding: 15,
     borderWidth: 1,
     width: '45%',

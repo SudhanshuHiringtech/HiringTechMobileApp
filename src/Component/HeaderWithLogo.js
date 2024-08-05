@@ -1,28 +1,22 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import { View, Image, TouchableOpacity, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Logo from "../Assets/dashboard/Logo";
-import { useSelector, useDispatch } from "react-redux";
-import { clearProfile, selectProfile } from "../Reduxtoolkit/profileSlice";
+import { useSelector } from "react-redux";
+import { selectProfile } from "../Reduxtoolkit/profileSlice";
 
 const HeaderWithLogo = ({ imageSource, text, image }) => {
     const navigation = useNavigation();
     const profile = useSelector(selectProfile);
+    const imagepro = profile?.profile?.user?.profileImage;
+    console.log("Profile Image Object:", imagepro);
 
-    const [images, setImages] = useState(profile?.profile?.user?.profileImage?.data ? `data:${profile.profile.user.profileImage.contentType};base64,${profile.profile.user.profileImage.data}` : null);
-
-
-    useEffect(() => {
-        if (profile?.profile?.user?.profileImage?.data) {
-          setImages(`data:${profile.profile.user.profileImage.contentType};base64,${profile.profile.user.profileImage.data}`);
-        }
-      }, []);
-
-
+    const profileimage = imagepro ? `http://192.168.29.188:5000/${imagepro.path}` : null;
+    console.log("Profile Image URL:", profileimage);
 
     return (
         <View style={styles.header}>
-            {image == false ? (
+            {image === false ? (
                 <Logo />
             ) : (
                 <View>
@@ -39,19 +33,20 @@ const HeaderWithLogo = ({ imageSource, text, image }) => {
                     onPress={() => {
                         navigation.openDrawer();
                     }}>
-                     {images ? (<Image
-
-                        source={require("../Assets/dashboard/Profile.png")}
-                        style={styles.profileImage}
-                        resizeMode="contain"
-                    />) :(
-                    <Image
-                    style={styles.profileImage}
-                    resizeMode="contain"
-                    source={{
-                    uri: images,
-                    }}
-                    />)}
+                    {profileimage === null ? (
+                        <Image
+                            source={require("../Assets/dashboard/Profile.png")}
+                            style={styles.profileImage}
+                            resizeMode="contain"
+                        />
+                    ) : (
+                        <Image
+                            style={styles.profileImage}
+                            resizeMode="contain"
+                            source={{ uri: profileimage }}
+                            onError={(error) => console.log("Image load error:", error.nativeEvent.error)}
+                        />
+                    )}
                 </TouchableOpacity>
             </View>
         </View>
@@ -65,13 +60,13 @@ const styles = {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        backgroundColor: "#fff", // Adjust background color as needed
-        borderBottomColor: "#ccc", // Adjust border color as needed
+        backgroundColor: "#fff",
+        borderBottomColor: "#ccc",
     },
     fontStyle: {
         fontSize: 28,
         color: "black",
-        fontWeight: 500,
+        fontWeight: "500",
     },
     logo: {
         width: 100,
@@ -101,6 +96,6 @@ const styles = {
     headerText: {
         fontSize: 18,
         fontWeight: "bold",
-        color: "#333", // Adjust text color as needed
+        color: "#333",
     },
 };

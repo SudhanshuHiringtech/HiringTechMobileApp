@@ -18,34 +18,7 @@ export default function Profile({ navigation }) {
   const email = profile?.profile?.user?.email
   const userId = profile?.profile?.user?._id
   console.log(profile)
-  const fetchProfile = async () => {
-    try {
-      const response = await fetch('http://192.168.29.188:5000/updateprofile', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-      console.log("edk",email)
-  
-      // Check if the response status is OK (200-299)
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-  
-      const data = await response.json();
-      console.log("Response Data:", data);
-      dispatch(setProfile(data));
-      // Assuming you have a state variable to store profile data
-    } catch (err) {
-      console.error("Fetch error:", err.message); // Assuming you have a state variable to store error messages
-    }
-  };
 
-  useEffect(() => {
-      fetchProfile()
-  }, [])
 
   const pickDocument = async (type) => {
     try {
@@ -109,7 +82,7 @@ export default function Profile({ navigation }) {
       <View style={{ height: '8%', width: '88%' }}>
         <HeaderWithLogo
           image={true}
-          text="My Resume" // Pass your header text dynamically
+          text="Profile" // Pass your header text dynamically
         />
       </View>
       <Text style={styles.header}>Update Your Profile</Text>

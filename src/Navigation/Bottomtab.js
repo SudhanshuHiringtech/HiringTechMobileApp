@@ -11,6 +11,9 @@ import Appleid from "../Screen/BottomTabScreen/Applied"
 
 import Message from '../Screen/BottomTabScreen/Message';
 import HRJobsScreen from '../../HRScreens/HRJobsScreen';
+import Candidates from '../../HRScreens/Candidates';
+import SearchJobScreen from '../Screen/BottomTabScreen/SearchJobScreen';
+
 const Tab = createBottomTabNavigator();
 
 
@@ -65,7 +68,7 @@ const Bottomtab = ()=> {
         ),
       }}
     />
-
+         { userdesignation == 'candidate' ? (
             <Tab.Screen
                 name="Appleid"
                 component={Appleid}
@@ -93,9 +96,10 @@ const Bottomtab = ()=> {
                     ),
                 }}
             />
-            <Tab.Screen 
-            name="Candidates"
-            component={Candidates}
+            ) :( 
+             <Tab.Screen 
+            name="Search Candidates"
+            component={SearchJobScreen}
             options={{
                 tabBarIcon: ({ focused }) => (
                     <View>
@@ -113,13 +117,14 @@ const Bottomtab = ()=> {
                     <Text
                         style={[
                             styles.text,
-                            { fontWeight: focused ? "bold" : "normal" },
+                            { fontWeight: focused ? "bold" : "normal" , fontSize:11},
                         ]}>
-                        Candidates
+                        Search Candidates
                     </Text>
                 ),
             }}
-            />
+            /> 
+            )}
 
             <Tab.Screen
                 name="Message"

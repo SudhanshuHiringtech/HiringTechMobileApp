@@ -39,6 +39,9 @@ import CreateJobScreen2 from '../Screen/HRJobCreateSection/CreateJobScreen2';
 import CreateJobDescriptionScreen from '../Screen/HRJobCreateSection/CreateJobDescriptionScreen'
 import CreateJobScreen4 from '../Screen/HRJobCreateSection/CreateJobScreen4';
 import CreateJobScreen5 from '../Screen/HRJobCreateSection/CreateJobScreen5';
+import ChatScreen from '../Screen/Chat/ChatScreen';
+import SearchJobScreen from '../Screen/BottomTabScreen/SearchJobScreen';
+import Candidates from '../../HRScreens/Candidates';
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = ()=> {
@@ -81,6 +84,8 @@ const AppNavigator = ()=> {
       <Stack.Screen name="Education" component={Education} />
       <Stack.Screen name="WorkExperience" component={WorkExperience} />
       <Stack.Screen name="JobDetails" component={JobDetailsScreen} />
+      <Stack.Screen name="ChatScreen" component={ChatScreen} />
+      <Stack.Screen name="Candidate" component={Candidates} />
       </Stack.Navigator>
   )
 
