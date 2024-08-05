@@ -11,6 +11,7 @@ import Appleid from "../Screen/BottomTabScreen/Applied"
 
 import Message from '../Screen/BottomTabScreen/Message';
 import HRJobsScreen from '../../HRScreens/HRJobsScreen';
+import Candidates from '../Screen/BottomTabScreen/Candidates'
 const Tab = createBottomTabNavigator();
 
 

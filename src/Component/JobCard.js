@@ -5,7 +5,6 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from 'react-redux';
 import { setProfile, selectProfile } from "../Reduxtoolkit/profileSlice";
 
-
 const JobHeader = ({ data, cardType }) => (
     <View style={styles.headerContainer}>
         <View style={styles.header}>
