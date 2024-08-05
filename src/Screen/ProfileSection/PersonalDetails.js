@@ -16,17 +16,14 @@ export default function PersonalDetails({ navigation }) {
   const [currentCity, setCurrentCity] = useState(profile?.profile?.user?.currentLocation || '');
   const [dob, setDob] = useState(profile?.profile?.user?.DOB || '');
   const [gender, setGender] = useState(profile?.profile?.user?.gender || '');
-  const [image, setImage] = useState(profile?.profile?.user?.profileImage?.data ? `data:${profile.profile.user.profileImage.contentType};base64,${profile.profile.user.profileImage.data}` : null);
   const [profileImage, setProfileImage] = useState(profile?.profile?.user?.profileImage);
   const dispatch = useDispatch();
   const id = profile?.profile?.user?._id;
-  console.log(profileImage)
+  
+  
+  const [image, setImage] = useState(profileImage ? `http://192.168.29.188:5000/${profileImage.path}` : null);
 
-  useEffect(() => {
-    if (profile?.profile?.user?.profileImage?.data) {
-      setImage(`data:${profile.profile.user.profileImage.contentType};base64,${profile.profile.user.profileImage.data}`);
-    }
-  }, [profile]);
+  console.log("yeedekho ", image)
  // console.log("Profile ka console", profile?.profile)
   const pickImage = async () => {
     try {

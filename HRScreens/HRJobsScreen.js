@@ -31,6 +31,8 @@ const HRJobsScreen = () => {
   }, [section]);
 
   console.log("Sfrrf", HRCandidate)
+  const leftSideTitle = 'Open & Pause'
+  const rightSideTitle = 'Closed'
   return (
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <View style={{ height: '8%', alignItems: 'center' }}>
@@ -42,7 +44,7 @@ const HRJobsScreen = () => {
         </View>
       </View>
       <View style={{ alignItems: 'center' }}>
-        <CustomToggle section={section} setSection={setSection} />
+        <CustomToggle section={section} setSection={setSection} leftSideTitle = {leftSideTitle} rightSideTitle={rightSideTitle}/>
       </View>
       <Text>HRJobsScreen</Text>
       <View style={{ alignItems: 'center', height:'85%'

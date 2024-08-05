@@ -12,11 +12,15 @@ import { Dropdown } from 'react-native-element-dropdown';
 
 const JobDetailsScreen = ({ route, navigation }) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const job = route.params.job;
+  const job = route?.params?.job;
   const HRJobDescription = route.params.HRJobDescription;
   const HRCandidate = route.params.HRCandidate;
-  const [jobStatus, setJobStatus] = useState(route.params.job.jobStatus)
-  console.log("ds",route.params.job.jobStatus)
+  const [jobStatus, setJobStatus] = useState(route?.params?.job?.jobStatus)
+  const [jobUpdate, setJobUpdate] = useState()
+   
+  console.log("Dum Damak Dum Dumm", job);
+  
+
 
   const [webViewHeight, setWebViewHeight] = useState(0);
 
@@ -43,6 +47,19 @@ const JobDetailsScreen = ({ route, navigation }) => {
 
   const jobDetail = standardizeJobData(job);
 
+  
+  const profile = useSelector(selectProfile);
+  const jobId = job?._id;
+  const candidateId = profile?.profile?.user?._id;
+  const candidateName = profile?.profile?.user?.name;
+  const candidateEmail = profile?.profile?.user?.email; 
+  const resume = profile?.profile?.user?.resume;
+  const role = profile?.profile?.user?.userdesignation;
+
+  console.log("DDD", job)
+
+
+// Create  Job Here 
   const CreateJobApplication = async () => {
     try {
       const response = await fetch('https://hiringtechb-2.onrender.com/job-post', {
@@ -63,14 +80,30 @@ const JobDetailsScreen = ({ route, navigation }) => {
       console.error('Error:', error.toString());
     }
   };
+  async function updateJobPost() {
+    try {
+      const response = await fetch(`http://192.168.29.188:5000/job-update/${jobId}`, {
+        method: 'POST', // Assuming the endpoint is using POST method for update
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jobDetail),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const updatedJobPost = await response.json();
+      Alert.alert('Your Job Update Successfully');
+      navigation.navigate('Home');
+      console.log('Updated Job Post:', updatedJobPost);
+      return updatedJobPost;
+    } catch (error) {
+      console.error('Error updating job post:', error);
+    }
+  }
 
-  const profile = useSelector(selectProfile);
-  const jobId = job?._id;
-  const candidateId = profile?.profile?.user?._id;
-  const candidateName = profile?.profile?.user?.name;
-  const candidateEmail = profile?.profile?.user?.email; 
-  const resume = profile?.profile?.user?.resume;
-  const role = profile?.profile?.user?.userdesignation;
 
   const ApplyforJob = async () => {
     try {
@@ -124,31 +157,35 @@ const JobDetailsScreen = ({ route, navigation }) => {
   console.log(HRCandidate , "dekh lere bhai tu ", role)
 
 
-  async function ChangeJobStatus() {
-    
-    try{ 
+  
+  const ChangeJobStatus = async (newStatus) => {
+    try {
       const response = await fetch(`http://192.168.29.188:5000/jobstatus/${jobId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({jobStatus}),
-    });
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ jobStatus: newStatus }),
+      });
 
-    const data = await response.json();
-    if (response.ok) {
-      Alert.alert('Job Statused');
-    } else {
-      console.error('falied to change Status', JSON.stringify(data.error));
+      const data = await response.json();
+      if (response.ok) {
+        Alert.alert('Job Status Updated');
+      } else {
+        console.error('Failed to change status:', JSON.stringify(data.error));
+      }
+    } catch (error) {
+      console.error('Error during status change:', error.toString());
     }
-  } catch (error) {
-    console.error('Error during Stauschange:', error.toString());
-  }
-};
+  };
 
-  useEffect(() =>{
-        ChangeJobStatus()
-  },[jobStatus])
+useEffect(() => {
+  if (jobUpdate) {
+    setJobStatus(jobUpdate.label);
+    const jobS = jobUpdate.label;
+    ChangeJobStatus(jobS);
+  }
+}, [jobUpdate]);
  
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -170,16 +207,14 @@ const JobDetailsScreen = ({ route, navigation }) => {
           { label: 'closed', value: '2' },
         ]}
         labelField="label"
-        // valueField="value"
+        valueField="value"
         placeholder="Select item"
-        value={jobStatus}
-        onChange={item => {
-          setJobStatus(item.label);
-        }}
+        value={jobUpdate}
+        onChange={item => setJobUpdate(item)}
       />
           <View style={{marginLeft:12}}>
-            <Text style={styles.jobTitle}>UX/UI Intern</Text>
-            <Text style={styles.companyInfo}>Accenture in India - Remote</Text>
+            <Text style={styles.jobTitle}>{jobDetail?.jobTitle}</Text>
+            <Text style={styles.companyInfo}>{jobDetail?.company} - {jobDetail?.workMode}</Text>
           </View>
           <Text style={styles.candidateTitle}>Candidates</Text>
           <View style={styles.candidates}>
@@ -295,7 +330,14 @@ const JobDetailsScreen = ({ route, navigation }) => {
             <TouchableOpacity style={styles.applyButton} onPress={ApplyforJob} disabled={isButtonDisabled}>
               {isButtonDisabled ? (<Text style={styles.buttonText}>Applied</Text>) : (<Text style={styles.buttonText}>Apply</Text>)}
             </TouchableOpacity>
-          ) : (
+          ) : HRCandidate === true && role === 'recuriter' ? 
+          (
+            <TouchableOpacity style={styles.applyButton} onPress={updateJobPost}>
+            <Text style={styles.buttonText}>Update Job</Text>
+          </TouchableOpacity>
+          )
+          :
+          (
             <TouchableOpacity style={styles.applyButton} onPress={CreateJobApplication}>
               <Text style={styles.buttonText}>Create Job</Text>
             </TouchableOpacity>

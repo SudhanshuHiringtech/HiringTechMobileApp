@@ -75,7 +75,7 @@ const Home = () => {
           //  console.log("Designation", profile?.user?.userdesignation);
             setCheckStatus(profile?.user?.userdesignation);
             const data = await response.json();
-            // console.log('Data received:', data);
+            //console.log('Data received:', data);
             setJobsData(data);
         } catch (error) {
             console.error(
