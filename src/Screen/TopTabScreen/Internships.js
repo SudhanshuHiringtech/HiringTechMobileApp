@@ -41,7 +41,7 @@ const Internships = () => {
 
   async function fetchJobs() {
     try {
-      const response = await fetch('https://hiringtechb-2.onrender.com/jobs/internship');
+      const response = await fetch('https://hiringtechb-1.onrender.com/jobs/internship');
       
       if (!response.ok) {
         throw new Error('Network response was not ok');

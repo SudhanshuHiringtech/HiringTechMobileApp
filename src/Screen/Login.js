@@ -20,7 +20,7 @@ const Login = ({route}) =>{
         //navigation.navigate('Bottomtab');
     console.log('hello');
     try {
-      const response = await fetch('http://192.168.29.188:5000/login', {
+      const response = await fetch('https://hiringtechb-1.onrender.com/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

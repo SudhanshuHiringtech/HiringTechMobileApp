@@ -18,7 +18,7 @@ const Messages = ({ navigation }) => {
   useEffect(() => {
     const fetchInvitations = async () => {
       try {
-        const response = await fetch(`http://192.168.29.188:5000/Invited-people?ownId=${ownId}`);
+        const response = await fetch(`https://hiringtechb-1.onrender.com/Invited-people?ownId=${ownId}`);
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }

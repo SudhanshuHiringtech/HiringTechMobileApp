@@ -249,7 +249,7 @@ const Education = ({ navigation }) => {
 
       // Example API call if needed to persist data
       
-      const response = await fetch('https://hiringtechb-2.onrender.com/education', {
+      const response = await fetch('https://hiringtechb-1.onrender.com/education', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

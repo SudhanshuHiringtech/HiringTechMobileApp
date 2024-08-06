@@ -146,7 +146,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setProfile, selectProfile } from "../../Reduxtoolkit/profileSlice";
 
 
-const socket = io('http://192.168.29.188:5000');
+const socket = io('https://hiringtechb-1.onrender.com');
 
 const ChatScreen = ({route}) => {
 
@@ -207,7 +207,7 @@ const ChatScreen = ({route}) => {
 
     const fetchChatHistory = async () => {
       try {
-        const response = await axios.get(`http://192.168.29.188:5000/chat/history/${senderId}/${receiverId}`);
+        const response = await axios.get(`https://hiringtechb-1.onrender.com/chat/history/${senderId}/${receiverId}`);
         setMessages(response.data);
       } catch (error) {
         console.error('Failed to fetch chat history:', error);
