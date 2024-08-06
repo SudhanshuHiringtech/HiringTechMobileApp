@@ -20,7 +20,7 @@ const Login = ({route}) =>{
         //navigation.navigate('Bottomtab');
     console.log('hello');
     try {
-      const response = await fetch('https://hiringtechb-2.onrender.com/login', {
+      const response = await fetch('https://hiringtechb-1.onrender.com/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

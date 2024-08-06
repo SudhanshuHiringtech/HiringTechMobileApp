@@ -82,10 +82,13 @@ const JobDetailsScreen = ({ route, navigation }) => {
   console.log("DDD", job)
 
 
+  // Ensure applications is set correctly
+
 // Create  Job Here 
   const CreateJobApplication = async () => {
+    console.log({ ...jobDetail, questions })
     try {
-      const response = await fetch('https://hiringtechb-2.onrender.com/job-post', {
+      const response = await fetch('https://hiringtechb-1.onrender.com/job-post', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -97,6 +100,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
         Alert.alert('Job post created successfully:');
         navigation.navigate('Home');
       } else {
+        console.log(result)
         Alert.alert('Error creating job post:', JSON.stringify(result));
       }
     } catch (error) {
@@ -105,7 +109,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
   };
   async function updateJobPost() {
     try {
-      const response = await fetch(`http://192.168.29.188:5000/job-update/${jobId}`, {
+      const response = await fetch(`https://hiringtechb-1.onrender.com/job-update/${jobId}`, {
         method: 'POST', // Assuming the endpoint is using POST method for update
         headers: {
           'Content-Type': 'application/json',
@@ -130,7 +134,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
 
   const ApplyforJob = async () => {
     try {
-      const response = await fetch('https://hiringtechb-2.onrender.com/apply-job', {
+      const response = await fetch('https://hiringtechb-1.onrender.com/apply-job', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -202,7 +206,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
   
   const ChangeJobStatus = async (newStatus) => {
     try {
-      const response = await fetch(`http://192.168.29.188:5000/jobstatus/${jobId}`, {
+      const response = await fetch(`https://hiringtechb-1.onrender.com/jobstatus/${jobId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -405,7 +409,7 @@ useEffect(() => {
             <TouchableOpacity style={styles.applyButton} onPress={ApplyforJob} disabled={isButtonDisabled}>
               {isButtonDisabled ? (<Text style={styles.buttonText}>Applied</Text>) : (<Text style={styles.buttonText}>Apply</Text>)}
             </TouchableOpacity>
-          ) : HRCandidate === true && role === 'recuriter' ? 
+          ) : !(HRCandidate === true) && role === 'recuriter' ? 
           (
             <TouchableOpacity style={styles.applyButton} onPress={updateJobPost}>
             <Text style={styles.buttonText}>Update Job</Text>

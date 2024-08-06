@@ -59,7 +59,7 @@ export default function Profile({ navigation }) {
   
     try {
       // Send a POST request with the FormData
-      const response = await fetch('https://hiringtechb-2.onrender.com/upload-files', {
+      const response = await fetch('https://hiringtechb-1.onrender.com/upload-files', {
         method: 'POST',
         body: formData,
       });

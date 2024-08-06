@@ -179,7 +179,7 @@ const SearchJobScreen = ({ navigation }) => {
       return;
     }
     try {
-      const response = await fetch(`http://192.168.29.188:5000/search?query=${searchQuery}&status=${jobStatus}`);
+      const response = await fetch(`https://hiringtechb-1.onrender.com/search?query=${searchQuery}&status=${jobStatus}`);
       const data = await response.json();
       setResults(data);
       setIsSearching(true);

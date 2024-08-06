@@ -27,7 +27,7 @@ const ChangePasswordScreen = ({navigation}) => {
    }
 
     try {
-      const response = await fetch('https://hiringtechb-2.onrender.com/change-password', {
+      const response = await fetch('https://hiringtechb-1.onrender.com/change-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

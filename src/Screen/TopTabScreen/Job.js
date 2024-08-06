@@ -26,7 +26,7 @@ const Job = () => {
 
     const handleApply = async (data) => {
       console.log('Filter Data:', data);
-      const baseUrl = 'http://192.168.29.188:5000/filterjobs';
+      const baseUrl = 'https://hiringtechb-1.onrender.com/filterjobs';
   
       // Construct query string from filters object
       const queryString = new URLSearchParams(data).toString();
@@ -76,7 +76,7 @@ const Job = () => {
 
   async function fetchJobs() {
     try {
-      const response = await fetch('https://hiringtechb-2.onrender.com/jobs/fulltime');
+      const response = await fetch('https://hiringtechb-1.onrender.com/jobs/fulltime');
 
       if (!response.ok) {
         throw new Error('Network response was not ok');

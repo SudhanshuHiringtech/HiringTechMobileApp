@@ -36,7 +36,7 @@ const Candidates = ({ navigation, route }) => {
 
   const ChangeCandidateJobStatus = async (AppliedId, candidateProfileStatus) => {
     try {
-      const response = await fetch(`http://192.168.29.188:5000/candidate-job-status/${AppliedId}`, {
+      const response = await fetch(`https://hiringtechb-1.onrender.com/candidate-job-status/${AppliedId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ const Candidates = ({ navigation, route }) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://192.168.29.188:5000/job-posts/${jobId}/applications`, {
+      const response = await fetch(`https://hiringtechb-1.onrender.com/job-posts/${jobId}/applications`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

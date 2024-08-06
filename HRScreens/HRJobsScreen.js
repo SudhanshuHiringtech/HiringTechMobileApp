@@ -12,7 +12,7 @@ const HRJobsScreen = () => {
 
   async function fetchJobs() {
     try {
-      const response = await fetch(`http://192.168.29.188:5000/jobstatus?status=${section}`);
+      const response = await fetch(`https://hiringtechb-1.onrender.com/jobstatus?status=${section}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }

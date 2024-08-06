@@ -21,7 +21,7 @@ export default function PersonalDetails({ navigation }) {
   const id = profile?.profile?.user?._id;
   
   
-  const [image, setImage] = useState(profileImage ? `http://192.168.29.188:5000/${profileImage.path}` : null);
+  const [image, setImage] = useState(profileImage ? `https://hiringtechb-1.onrender.com/${profileImage.path}` : null);
 
   console.log("yeedekho ", image)
  // console.log("Profile ka console", profile?.profile)
@@ -75,7 +75,7 @@ export default function PersonalDetails({ navigation }) {
         });
       }
 
-      const response = await fetch('http://192.168.29.188:5000/personal-details', {
+      const response = await fetch('https://hiringtechb-1.onrender.com/personal-details', {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
