@@ -1,6 +1,6 @@
 
 import React, { useState , useEffect} from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert, TextInput } from 'react-native';
 import MainJobCard from '../Component/MainJobCard';
 import { WebView } from 'react-native-webview';
 import { Checkbox, Card } from 'react-native-paper';
@@ -17,6 +17,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
   const HRCandidate = route.params.HRCandidate;
   const [jobStatus, setJobStatus] = useState(route?.params?.job?.jobStatus)
   const [jobUpdate, setJobUpdate] = useState()
+  const [questions, setQuestions] = useState([]);
    
   console.log("Dum Damak Dum Dumm", job);
   
@@ -41,11 +42,32 @@ const JobDetailsScreen = ({ route, navigation }) => {
     minPay: data.minPay || data.minSalary || 0,
     maxPay: data.maxPay || data.maxSalary || 0,
     workingHours: data.workingHours || data.schedule || '',
-    questions: data.questions || [], 
+   // questions: data.questions || [], 
     experienceRequired: data.experienceRequired || data.experience?.[0] || '',
   });
 
   const jobDetail = standardizeJobData(job);
+
+
+
+  useEffect(() => {
+    if (job?.questions) {
+      setQuestions(job.questions);
+    }
+    if (job) {
+     // setJobDetails(route.params.jobDetails);
+      if (job.questions) {
+        setQuestions(job.questions);
+      }
+    }
+  }, [route.params]);
+
+   // Update state when jobDetails changes
+   useEffect(() => {
+    if (Object.keys(job).length > 0 && job.questions) {
+      setQuestions(job.questions);
+    }
+  }, [job]);
 
   
   const profile = useSelector(selectProfile);
@@ -56,6 +78,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
   const resume = profile?.profile?.user?.resume;
   const role = profile?.profile?.user?.userdesignation;
 
+  const [isDisabled, setIsDisabled] = useState(role == 'candidate' ? true : false);
   console.log("DDD", job)
 
 
@@ -67,7 +90,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(jobDetail)
+        body: JSON.stringify({ ...jobDetail, questions }),
       });
       const result = await response.json();
       if (response.status === 201) {
@@ -140,12 +163,31 @@ const JobDetailsScreen = ({ route, navigation }) => {
     setTimeout(function() { window.ReactNativeWebView.postMessage(document.body.scrollHeight); }, 500);
   `;
 
+  const addQuestion = () => {
+    const newQuestion = { questionId: questions.length + 1, question: '', answer: '', answerText: '' };
+    setQuestions([...questions, newQuestion]);
+  };
+
   const handleAnswerChange = (id, answer) => {
-    setQuestions(jobDetail?.questions?.map(q => q.questionId === id ? { ...q, answer } : q));
+    setQuestions(questions.map(q => q.questionId === id ? { ...q, answer, answerText: answer === 'write' ? q.answerText : '' } : q));
   };
 
   const handleQuestionChange = (id, question) => {
-    setQuestions(jobDetail?.questions?.map(q => q.questionId === id ? { ...q, question } : q));
+    setQuestions(questions.map(q => q.questionId === id ? { ...q, question } : q));
+  };
+
+  const handleAnswerTextChange = (id, text) => {
+    setQuestions(questions.map(q => q.questionId === id ? { ...q, answerText: text } : q));
+  };
+
+  const removeQuestion = (id) => {
+    setQuestions(questions.filter(q => q.questionId !== id));
+  };
+
+  const handleContinue = () => {
+    const updatedJobDetails = { ...jobDetails, questions, filter };
+    console.log('Updated jobDetails:', updatedJobDetails);
+    navigation.navigate('JobDetails', { job: updatedJobDetails, HRJobDescription: true });
   };
 
   const [analytics, setAnalytics] = useState({
@@ -307,24 +349,57 @@ useEffect(() => {
           </Text>
         ))}
   
-        {jobDetail?.questions?.map((q) => (
-          <View key={q.questionId} style={styles.questionContainer}>
-            <Text style={styles.questionInput}>{q.question}</Text>
-            <View style={styles.optionContainer}>
-              <TouchableOpacity style={styles.option} onPress={() => handleAnswerChange(q.id, 'yes')}>
-                <Checkbox status={q.answer === 'yes' ? 'checked' : 'unchecked'} color={'orange'}/>
-                <Text style={styles.optionText}>Yes</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.option} onPress={() => handleAnswerChange(q.id, 'no')}>
-                <Checkbox status={q.answer === 'no' ? 'checked' : 'unchecked'} color={'orange'} />
-                <Text style={styles.optionText}>No</Text>
-              </TouchableOpacity>
+  {questions.map((q) => (
+            <View key={q.questionId} style={styles.questionContainer}>
+              <TextInput
+                style={styles.questionInput}
+                editable={!isDisabled}
+                placeholder="Enter your question"
+                value={q.question}
+                onChangeText={(text) => handleQuestionChange(q.questionId, text)}
+              />
+              <View style={styles.optionContainer}>
+                <TouchableOpacity 
+                  style={styles.option} 
+                  onPress={() => handleAnswerChange(q.questionId, 'yes')}
+                >
+                  <Checkbox 
+                    status={q.answer === 'yes' ? 'checked' : 'unchecked'} 
+                    color={'orange'}
+                  />
+                  <Text style={styles.optionText}>Yes</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  style={styles.option} 
+                  onPress={() => handleAnswerChange(q.questionId, 'no')}
+                >
+                  <Checkbox 
+                    status={q.answer === 'no' ? 'checked' : 'unchecked'} 
+                    color={'orange'} 
+                  />
+                  <Text style={styles.optionText}>No</Text>
+                </TouchableOpacity>
+                {/* <TouchableOpacity 
+                  style={styles.option} 
+                  onPress={() => handleAnswerChange(q.questionId, 'write')}
+                >
+                  <Checkbox 
+                    status={q.answer === 'write' ? 'checked' : 'unchecked'} 
+                    color={'orange'}
+                  />
+                  <Text style={styles.optionText}>Write</Text>
+                </TouchableOpacity> */}
+              </View>
+              {q.answer === 'write' && (
+                <TextInput
+                  style={styles.answerInput}
+                  placeholder="Enter your answer"
+                  value={q.answerText}
+                  onChangeText={(text) => handleAnswerTextChange(q.questionId, text)}
+                />
+              )}
             </View>
-            <TouchableOpacity onPress={() => removeQuestion(q.id)} style={styles.removeButton}>
-              <Icon name="trash-can-outline" size={24} color="skyblue" />
-            </TouchableOpacity>
-          </View>
-        ))}
+          ))}
         <View style={styles.applyButtonContainer}>
           {role === 'candidate' ? (
             <TouchableOpacity style={styles.applyButton} onPress={ApplyforJob} disabled={isButtonDisabled}>

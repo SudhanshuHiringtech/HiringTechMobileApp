@@ -6130,6 +6130,7 @@ react-is@^17.0.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+<<<<<<< HEAD
 react-native-calendar-events@^2.2.0:
   version "2.2.0"
   resolved "https://registry.npmjs.org/react-native-calendar-events/-/react-native-calendar-events-2.2.0.tgz"
@@ -6158,6 +6159,12 @@ react-native-calendars@^1.1306.0:
     xdate "^0.8.0"
   optionalDependencies:
     moment "^2.29.4"
+=======
+react-native-config@^1.5.3:
+  version "1.5.3"
+  resolved "https://registry.npmjs.org/react-native-config/-/react-native-config-1.5.3.tgz"
+  integrity sha512-3D05Abgk5DfDw9w258EzXvX5AkU7eqj3u9H0H0L4gUga4nYg/zuupcrpGbpF4QeXBcJ84jjs6g8JaEP6VBT7Pg==
+>>>>>>> 4131df2... make api changes
 
 react-native-document-picker@^9.3.0:
   version "9.3.0"
