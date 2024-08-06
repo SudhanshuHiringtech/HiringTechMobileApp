@@ -15,6 +15,8 @@ import {
 import JobCard from "../../Component/JobCard";
 import HeaderWithLogo from "../../Component/HeaderWithLogo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_ROUTES } from '../../../apiCofig';
+
 
 const { width, height } = Dimensions.get("window");
 
@@ -59,7 +61,6 @@ const Home = () => {
     const [profile, setProfile] = useState(null);
     const [checkStatus, setCheckStatus] = useState();
     const [loading, setLoading] = useState(true); // State for loading
-
     async function fetchJobs() {
         try {
             const response = await fetch(
