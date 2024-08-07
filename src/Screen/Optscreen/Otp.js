@@ -27,7 +27,7 @@ const Otp = ({ navigation, route }) => {
 
     try {
       const response = await fetch(
-        'https://hiringtechb-2.onrender.com/verify-otp',
+        'https://hiringtechb-1.onrender.com/verify-otp',
         {
           method: 'POST',
           headers: {
