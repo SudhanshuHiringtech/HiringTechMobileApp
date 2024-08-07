@@ -1,140 +1,3 @@
-// import React, { useState } from 'react';
-// import { View, Text, TextInput, StyleSheet, TouchableOpacity , Image} from 'react-native';
-// import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-// // import { faPaperclip, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-
-// const ChatScreen = () => {
-//   const [message, setMessage] = useState('');
-//   const [messages, setMessages] = useState([
-//     {
-//       sender: 'bot',
-//       text: 'Welcome to LiveChat! How can I help you?',
-//     },
-//   ]);
-
-//   const sendMessage = () => {
-//     if (message.trim() !== '') {
-//       setMessages([...messages, { sender: 'user', text: message }]);
-//       setMessage('');
-//     }
-//   };
-
-//   const [selectedFile, setSelectedFile] = useState(null);
-
-//   const handleFileSelection = async () => {
-//     try {
-//       const result = await DocumentPicker.pick({
-//         type: [DocumentPicker.types.allFiles],
-//       });
-
-//       setSelectedFile(result);
-//     } catch (err) {
-//       console.warn(err);
-//     }
-//   };
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Chat with us!</Text>
-//       <View style={styles.messages}>
-//         {messages.map((item, index) => (
-//           <View
-//             key={index}
-//             style={[
-//               styles.message,
-//               item.sender === 'bot' ? styles.botMessage : styles.userMessage,
-//             ]}
-//           >
-//             <Text style={styles.messageText}>{item.text}</Text>
-//           </View>
-//         ))}
-//       </View>
-//       <View style={styles.inputContainer}>
-//         <TextInput
-//           style={styles.input}
-//           placeholder="Write a message"
-//           value={message}
-//           onChangeText={setMessage}
-//         />
-//          <TouchableOpacity style={styles.attachmentButton}  onPress={handleFileSelection}>
-//          {selectedFile && <Text>Selected File: {selectedFile.name}</Text>}
-//           <Icon name="paperclip" size={24} color="#333" />
-//         </TouchableOpacity>
-//         <TouchableOpacity onPress={sendMessage}>
-//           <Icon name="send" size={30}/>
-//         </TouchableOpacity>
-//       </View>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#f8f8f8',
-//     padding: 16,
-//   },
-//   title: {
-//     fontSize: 20,
-//     fontWeight: 'bold',
-//     marginBottom: 16,
-//     textAlign:'center',
-//   },
-//   messages: {
-//     flex: 1,
-//     marginTop:20,
-//   },
-//   message: {
-//     padding: 12,
-//     borderRadius: 16,
-//     marginBottom: 8,
-//     maxWidth: '80%',
-//   },
-//   botMessage: {
-//     backgroundColor: '#f0f0f0',
-//     alignSelf: 'flex-start',
-//   },
-//   userMessage: {
-//     backgroundColor: '#0080ff',
-//     alignSelf: 'flex-end',
-//     color: '#fff',
-//   },
-//   messageText: {
-//     fontSize: 16,
-//   },
-//   inputContainer: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     paddingHorizontal: 16,
-//     paddingVertical: 8,
-//     backgroundColor: '#fff',
-//     borderRadius: 24,
-//     marginBottom: 16,
-//   },
-//   input: {
-//     flex: 1,
-//     fontSize: 16,
-//     paddingHorizontal: 16,
-//   },
-//   attachmentButton: {
-//     padding: 8,
-//     marginRight: 8,
-//   },
-//   sendButton: {
-//     padding: 8,
-//     backgroundColor: '#0080ff',
-//     borderRadius: 16,
-//   },
-
-// });
-
-// export default ChatScreen;
-
-
-// const receiverId = '6679360f2808d75e19ff6715'
-//   const senderId = '669a448ec75a03fc981be651'
-
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -146,12 +9,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setProfile, selectProfile } from "../../Reduxtoolkit/profileSlice";
 
 
-const socket = io('https://hiringtechb-1.onrender.com');
+const socket = io('http://192.168.29.188:5000');
 
 const ChatScreen = ({route}) => {
 
   const profile = useSelector(selectProfile);
-  const receiverId = '6679360f2808d75e19ff6715';
+  const receiverId = route.params.userId || route?.params?.candidateData?.candidateId;
+  console.log("dekho", route?.params?.candidateData?.candidateId);
   const senderId = profile?.profile?.user?._id;
 
   const inviteMessage = route?.params?.inviteMessage;
@@ -197,7 +61,34 @@ const ChatScreen = ({route}) => {
     }
   }
   };
+
+  const markMessageAsRead = async (messageId) => {
+    console.log("fvdz")
+    try {
+      const response = await fetch(`http://192.168.29.188:5000/messages/${messageId}/read`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
   
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const updatedMessage = await response.json();
+      console.log('Message marked as read:', updatedMessage);
+    } catch (error) {
+      console.error('Error marking message as read:', error);
+    }
+  };
+  
+  const markAllMessagesAsRead = async (messages) => {
+    const unreadMessages = messages.filter((message) => !message.read && message.senderId !== senderId);
+    for (const message of unreadMessages) {
+      await markMessageAsRead(message._id);
+    }
+  };
 
   useEffect(() => {
     if (!receiverId) {
@@ -207,7 +98,7 @@ const ChatScreen = ({route}) => {
 
     const fetchChatHistory = async () => {
       try {
-        const response = await axios.get(`https://hiringtechb-1.onrender.com/chat/history/${senderId}/${receiverId}`);
+        const response = await axios.get(`http://192.168.29.188:5000/history/${senderId}/${receiverId}`);
         setMessages(response.data);
       } catch (error) {
         console.error('Failed to fetch chat history:', error);
@@ -236,6 +127,10 @@ const ChatScreen = ({route}) => {
     scrollViewRef.current?.scrollToEnd({ animated: true });
   }, [messages]);
 
+  useEffect(() => {
+    markAllMessagesAsRead(messages);
+  }, [messages, senderId]);
+
   const sendMessage = () => {
       createInvitedPerson()
 
@@ -246,7 +141,7 @@ const ChatScreen = ({route}) => {
 
     if (message.trim() !== '') {
       const newMessage = { senderId: senderId, receiverId: receiverId, message, createdAt: new Date() };
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      //setMessages((prevMessages) => [...prevMessages, newMessage]);
       socket.emit('sendMessage', newMessage);
       setMessage('');
       scrollViewRef.current?.scrollToEnd({ animated: true }); // Scroll to end after sending message
@@ -271,6 +166,8 @@ const ChatScreen = ({route}) => {
     const isSender = item.sender === senderId;
     const messageStyle = isSender ? styles.userMessage : styles.botMessage;
     const containerStyle = isSender ? styles.userMessageContainer : styles.botMessageContainer;
+    
+
 
     return (
       <View key={index} style={containerStyle}>
