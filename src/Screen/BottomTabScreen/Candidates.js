@@ -1,8 +1,6 @@
 import React,{useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { PermissionsAndroid } from 'react-native';
-import RNFetchBlob from 'rn-fetch-blob';
 // import ScheduleInterview from '../InterviewScreen/ScheduleInterview'
 
 const candidates = [
@@ -38,49 +36,8 @@ const Candidate = ({ navigation }) => {
 
 const CandidateCard = ({ name, title, experience, skills, downloade, onPress }) => {
 
-  async function requestStoragePermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('Storage permission granted');
-      } else {
-        console.log('Storage permission denied');
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  }
+ 
   
-  async function downloadPdf() {
-    requestStoragePermission()
-
-    try {
-      const { config, fs } = RNFetchBlob;
-      const downloads = fs.dirs.DownloadDir;
-      const response = await fetch('https://example.com/document.pdf');
-      const blob = await response.blob();
-      const filePath = `${downloads}/document.pdf`;
-      const exists = await fs.exists(filePath);
-      if (exists) {
-        await fs.unlink(filePath);
-      }
-      const result = await config({
-        fileCache: true,
-        addAndroidDownloads: {
-          useDownloadManager: true,
-          notification: true,
-          path: filePath,
-          description: 'Downloading PDF document', 
-          mediaScannable: true,
-        },
-      }).fetch('GET', blob.uri);
-      console.log('PDF document downloaded successfully', result.path());
-    } catch (err) {
-      console.warn(err);
-    }
-  }
 
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -127,19 +84,13 @@ const CandidateCard = ({ name, title, experience, skills, downloade, onPress }) 
         </View>
         <View style={styles.detail}>
           <Icon name="download" size={16} color="#999" />
-          <Text style={styles.detailText} onPress={() => downloadPdf()}>{downloade}</Text>
+          <Text style={styles.detailText} >{downloade}</Text>
 
         </View>
       </View>
     </TouchableOpacity> 
   );
 };
-
-
-
-
-
-
 
 
   return (
