@@ -1,20 +1,20 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const CustomToggle = ({ section, setSection }) => {
+const CustomToggle = ({ section, setSection, leftSideTitle, rightSideTitle }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={[styles.button, section === 'open' && styles.activeButton]}
         onPress={() => setSection('open')}
       >
-        <Text style={[styles.text, section === 'open' && styles.activeText]}>Open & Pause</Text>
+        <Text style={[styles.text, section === 'open' && styles.activeText]}>{leftSideTitle}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.buttonRight, section === 'closed' && styles.activeButton]}
         onPress={() => setSection('closed')}
       >
-        <Text style={[styles.text, section === 'closed' && styles.activeText]}>Closed</Text>
+        <Text style={[styles.text, section === 'closed' && styles.activeText]}>{rightSideTitle}</Text>
       </TouchableOpacity>
     </View>
   );

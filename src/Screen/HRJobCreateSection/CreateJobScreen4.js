@@ -3,15 +3,17 @@ import { View, StyleSheet, ScrollView, TextInput, Text, TouchableOpacity } from 
 import { Checkbox } from 'react-native-paper';
 import HeaderWithLogo from '../../Component/HeaderWithLogo';
 
-const skillsList = [
-  'Figma', 'UX Design', 'HTML', 'CSS', 'JavaScript', 'React.js', 'Node.js'
-];
+
 
 const CreateJobScreen4 = ({navigation, route}) => {
   const [skillsRequired, setskillsRequired] = useState([]);
   const [email, setEmail] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const [jobDetails, setJobDetails] = useState({});
+  const [customSkill, setCustomSkill] = useState('');
+  const [skillsList, setSkillsList] = useState([
+    'Figma', 'UX Design', 'HTML', 'CSS', 'JavaScript', 'React.js', 'Node.js'
+  ]);
 
   const toggleSkill = (skill) => {
     setskillsRequired((prevSkills) =>
@@ -22,6 +24,15 @@ const CreateJobScreen4 = ({navigation, route}) => {
   };
   const jobData = route.params.jobDetails;
   console.log("data laya hai🥳", jobData)
+
+  const handleCustomSkillsSubmit = () => {
+    if (customSkill) {
+      setskillsRequired([...skillsRequired, customSkill]);
+      setSkillsList([...skillsList, customSkill]);
+      setCustomSkill('');
+    }
+    console.log(skillsRequired)
+  };
 
   const handleSubmit = () => {
       console.log(skillsRequired)
@@ -40,7 +51,7 @@ const CreateJobScreen4 = ({navigation, route}) => {
 
   return (
     <View style={{felx:1,  backgroundColor: "#ffffff" }}>
-        <View style={{ height: '8%', marginTop: 5 }}>
+        <View style={{ height: '8%', marginTop: 5 , marginLeft:30}}>
         <HeaderWithLogo
           imageSource={require("../../Assets/dashboard/Logo.png")}
           image={false}
@@ -81,6 +92,17 @@ const CreateJobScreen4 = ({navigation, route}) => {
               ]}> + {skill}</Text>
             </TouchableOpacity>
           ))}
+           <TextInput
+                 style={{padding: 3,
+                  borderWidth: 1,
+                  borderColor: 'skyblue',
+                  borderRadius: 20,
+                  margin: 5,}}
+                 placeholder="Enter your Skills"     
+               value={customSkill}
+               onChangeText={setCustomSkill}
+               onBlur={handleCustomSkillsSubmit}
+        />
         </View>
 
         <Text style={styles.sectionTitle}>Communication Preferences</Text>

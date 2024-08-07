@@ -220,7 +220,7 @@ const WorkExperience = ({ navigation }) => {
 
     console.log(updatedWorkExperienceFields);
     try {
-      const response = await fetch('https://hiringtechb-2.onrender.com/experience', {
+      const response = await fetch('https://hiringtechb-1.onrender.com/experience', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

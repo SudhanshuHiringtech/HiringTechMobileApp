@@ -1,6 +1,6 @@
 
 import React, { useState , useEffect} from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert, TextInput } from 'react-native';
 import MainJobCard from '../Component/MainJobCard';
 import { WebView } from 'react-native-webview';
 import { Checkbox, Card } from 'react-native-paper';
@@ -12,11 +12,16 @@ import { Dropdown } from 'react-native-element-dropdown';
 
 const JobDetailsScreen = ({ route, navigation }) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const job = route.params.job;
+  const job = route?.params?.job;
   const HRJobDescription = route.params.HRJobDescription;
   const HRCandidate = route.params.HRCandidate;
-  const [jobStatus, setJobStatus] = useState(route.params.job.jobStatus)
-  console.log("ds",route.params.job.jobStatus)
+  const [jobStatus, setJobStatus] = useState(route?.params?.job?.jobStatus)
+  const [jobUpdate, setJobUpdate] = useState()
+  const [questions, setQuestions] = useState([]);
+   
+  console.log("Dum Damak Dum Dumm", job);
+  
+
 
   const [webViewHeight, setWebViewHeight] = useState(0);
 
@@ -37,33 +42,34 @@ const JobDetailsScreen = ({ route, navigation }) => {
     minPay: data.minPay || data.minSalary || 0,
     maxPay: data.maxPay || data.maxSalary || 0,
     workingHours: data.workingHours || data.schedule || '',
-    questions: data.questions || [], 
+   // questions: data.questions || [], 
     experienceRequired: data.experienceRequired || data.experience?.[0] || '',
   });
 
   const jobDetail = standardizeJobData(job);
 
-  const CreateJobApplication = async () => {
-    try {
-      const response = await fetch('https://hiringtechb-2.onrender.com/job-post', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(jobDetail)
-      });
-      const result = await response.json();
-      if (response.status === 201) {
-        Alert.alert('Job post created successfully:');
-        navigation.navigate('Home');
-      } else {
-        Alert.alert('Error creating job post:', JSON.stringify(result));
-      }
-    } catch (error) {
-      console.error('Error:', error.toString());
-    }
-  };
 
+
+  useEffect(() => {
+    if (job?.questions) {
+      setQuestions(job.questions);
+    }
+    if (job) {
+     // setJobDetails(route.params.jobDetails);
+      if (job.questions) {
+        setQuestions(job.questions);
+      }
+    }
+  }, [route.params]);
+
+   // Update state when jobDetails changes
+   useEffect(() => {
+    if (Object.keys(job).length > 0 && job.questions) {
+      setQuestions(job.questions);
+    }
+  }, [job]);
+
+  
   const profile = useSelector(selectProfile);
   const jobId = job?._id;
   const candidateId = profile?.profile?.user?._id;
@@ -72,9 +78,63 @@ const JobDetailsScreen = ({ route, navigation }) => {
   const resume = profile?.profile?.user?.resume;
   const role = profile?.profile?.user?.userdesignation;
 
+  const [isDisabled, setIsDisabled] = useState(role == 'candidate' ? true : false);
+  console.log("DDD", job)
+
+
+  // Ensure applications is set correctly
+
+// Create  Job Here 
+  const CreateJobApplication = async () => {
+    console.log({ ...jobDetail, questions })
+    try {
+      const response = await fetch('https://hiringtechb-1.onrender.com/job-post', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ...jobDetail, questions }),
+      });
+      const result = await response.json();
+      if (response.status === 201) {
+        Alert.alert('Job post created successfully:');
+        navigation.navigate('Home');
+      } else {
+        console.log(result)
+        Alert.alert('Error creating job post:', JSON.stringify(result));
+      }
+    } catch (error) {
+      console.error('Error:', error.toString());
+    }
+  };
+  async function updateJobPost() {
+    try {
+      const response = await fetch(`https://hiringtechb-1.onrender.com/job-update/${jobId}`, {
+        method: 'POST', // Assuming the endpoint is using POST method for update
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jobDetail),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const updatedJobPost = await response.json();
+      Alert.alert('Your Job Update Successfully');
+      navigation.navigate('Home');
+      console.log('Updated Job Post:', updatedJobPost);
+      return updatedJobPost;
+    } catch (error) {
+      console.error('Error updating job post:', error);
+    }
+  }
+
+
   const ApplyforJob = async () => {
     try {
-      const response = await fetch('https://hiringtechb-2.onrender.com/apply-job', {
+      const response = await fetch('https://hiringtechb-1.onrender.com/apply-job', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -107,12 +167,31 @@ const JobDetailsScreen = ({ route, navigation }) => {
     setTimeout(function() { window.ReactNativeWebView.postMessage(document.body.scrollHeight); }, 500);
   `;
 
+  const addQuestion = () => {
+    const newQuestion = { questionId: questions.length + 1, question: '', answer: '', answerText: '' };
+    setQuestions([...questions, newQuestion]);
+  };
+
   const handleAnswerChange = (id, answer) => {
-    setQuestions(jobDetail?.questions?.map(q => q.questionId === id ? { ...q, answer } : q));
+    setQuestions(questions.map(q => q.questionId === id ? { ...q, answer, answerText: answer === 'write' ? q.answerText : '' } : q));
   };
 
   const handleQuestionChange = (id, question) => {
-    setQuestions(jobDetail?.questions?.map(q => q.questionId === id ? { ...q, question } : q));
+    setQuestions(questions.map(q => q.questionId === id ? { ...q, question } : q));
+  };
+
+  const handleAnswerTextChange = (id, text) => {
+    setQuestions(questions.map(q => q.questionId === id ? { ...q, answerText: text } : q));
+  };
+
+  const removeQuestion = (id) => {
+    setQuestions(questions.filter(q => q.questionId !== id));
+  };
+
+  const handleContinue = () => {
+    const updatedJobDetails = { ...jobDetails, questions, filter };
+    console.log('Updated jobDetails:', updatedJobDetails);
+    navigation.navigate('JobDetails', { job: updatedJobDetails, HRJobDescription: true });
   };
 
   const [analytics, setAnalytics] = useState({
@@ -124,31 +203,35 @@ const JobDetailsScreen = ({ route, navigation }) => {
   console.log(HRCandidate , "dekh lere bhai tu ", role)
 
 
-  async function ChangeJobStatus() {
-    
-    try{ 
-      const response = await fetch(`http://192.168.29.188:5000/jobstatus/${jobId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({jobStatus}),
-    });
+  
+  const ChangeJobStatus = async (newStatus) => {
+    try {
+      const response = await fetch(`https://hiringtechb-1.onrender.com/jobstatus/${jobId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ jobStatus: newStatus }),
+      });
 
-    const data = await response.json();
-    if (response.ok) {
-      Alert.alert('Job Statused');
-    } else {
-      console.error('falied to change Status', JSON.stringify(data.error));
+      const data = await response.json();
+      if (response.ok) {
+        Alert.alert('Job Status Updated');
+      } else {
+        console.error('Failed to change status:', JSON.stringify(data.error));
+      }
+    } catch (error) {
+      console.error('Error during status change:', error.toString());
     }
-  } catch (error) {
-    console.error('Error during Stauschange:', error.toString());
-  }
-};
+  };
 
-  useEffect(() =>{
-        ChangeJobStatus()
-  },[jobStatus])
+useEffect(() => {
+  if (jobUpdate) {
+    setJobStatus(jobUpdate.label);
+    const jobS = jobUpdate.label;
+    ChangeJobStatus(jobS);
+  }
+}, [jobUpdate]);
  
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -170,16 +253,14 @@ const JobDetailsScreen = ({ route, navigation }) => {
           { label: 'closed', value: '2' },
         ]}
         labelField="label"
-        // valueField="value"
+        valueField="value"
         placeholder="Select item"
-        value={jobStatus}
-        onChange={item => {
-          setJobStatus(item.label);
-        }}
+        value={jobUpdate}
+        onChange={item => setJobUpdate(item)}
       />
           <View style={{marginLeft:12}}>
-            <Text style={styles.jobTitle}>UX/UI Intern</Text>
-            <Text style={styles.companyInfo}>Accenture in India - Remote</Text>
+            <Text style={styles.jobTitle}>{jobDetail?.jobTitle}</Text>
+            <Text style={styles.companyInfo}>{jobDetail?.company} - {jobDetail?.workMode}</Text>
           </View>
           <Text style={styles.candidateTitle}>Candidates</Text>
           <View style={styles.candidates}>
@@ -272,30 +353,70 @@ const JobDetailsScreen = ({ route, navigation }) => {
           </Text>
         ))}
   
-        {jobDetail?.questions?.map((q) => (
-          <View key={q.questionId} style={styles.questionContainer}>
-            <Text style={styles.questionInput}>{q.question}</Text>
-            <View style={styles.optionContainer}>
-              <TouchableOpacity style={styles.option} onPress={() => handleAnswerChange(q.id, 'yes')}>
-                <Checkbox status={q.answer === 'yes' ? 'checked' : 'unchecked'} color={'orange'}/>
-                <Text style={styles.optionText}>Yes</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.option} onPress={() => handleAnswerChange(q.id, 'no')}>
-                <Checkbox status={q.answer === 'no' ? 'checked' : 'unchecked'} color={'orange'} />
-                <Text style={styles.optionText}>No</Text>
-              </TouchableOpacity>
+  {questions.map((q) => (
+            <View key={q.questionId} style={styles.questionContainer}>
+              <TextInput
+                style={styles.questionInput}
+                editable={!isDisabled}
+                placeholder="Enter your question"
+                value={q.question}
+                onChangeText={(text) => handleQuestionChange(q.questionId, text)}
+              />
+              <View style={styles.optionContainer}>
+                <TouchableOpacity 
+                  style={styles.option} 
+                  onPress={() => handleAnswerChange(q.questionId, 'yes')}
+                >
+                  <Checkbox 
+                    status={q.answer === 'yes' ? 'checked' : 'unchecked'} 
+                    color={'orange'}
+                  />
+                  <Text style={styles.optionText}>Yes</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  style={styles.option} 
+                  onPress={() => handleAnswerChange(q.questionId, 'no')}
+                >
+                  <Checkbox 
+                    status={q.answer === 'no' ? 'checked' : 'unchecked'} 
+                    color={'orange'} 
+                  />
+                  <Text style={styles.optionText}>No</Text>
+                </TouchableOpacity>
+                {/* <TouchableOpacity 
+                  style={styles.option} 
+                  onPress={() => handleAnswerChange(q.questionId, 'write')}
+                >
+                  <Checkbox 
+                    status={q.answer === 'write' ? 'checked' : 'unchecked'} 
+                    color={'orange'}
+                  />
+                  <Text style={styles.optionText}>Write</Text>
+                </TouchableOpacity> */}
+              </View>
+              {q.answer === 'write' && (
+                <TextInput
+                  style={styles.answerInput}
+                  placeholder="Enter your answer"
+                  value={q.answerText}
+                  onChangeText={(text) => handleAnswerTextChange(q.questionId, text)}
+                />
+              )}
             </View>
-            <TouchableOpacity onPress={() => removeQuestion(q.id)} style={styles.removeButton}>
-              <Icon name="trash-can-outline" size={24} color="skyblue" />
-            </TouchableOpacity>
-          </View>
-        ))}
+          ))}
         <View style={styles.applyButtonContainer}>
           {role === 'candidate' ? (
             <TouchableOpacity style={styles.applyButton} onPress={ApplyforJob} disabled={isButtonDisabled}>
               {isButtonDisabled ? (<Text style={styles.buttonText}>Applied</Text>) : (<Text style={styles.buttonText}>Apply</Text>)}
             </TouchableOpacity>
-          ) : (
+          ) : !(HRCandidate === true) && role === 'recuriter' ? 
+          (
+            <TouchableOpacity style={styles.applyButton} onPress={updateJobPost}>
+            <Text style={styles.buttonText}>Update Job</Text>
+          </TouchableOpacity>
+          )
+          :
+          (
             <TouchableOpacity style={styles.applyButton} onPress={CreateJobApplication}>
               <Text style={styles.buttonText}>Create Job</Text>
             </TouchableOpacity>

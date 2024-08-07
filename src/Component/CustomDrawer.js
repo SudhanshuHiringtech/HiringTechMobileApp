@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { useNavigation } from "@react-navigation/native";
@@ -9,7 +9,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const CustomDrawer = (props) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const profile = useSelector(selectProfile);
 
+    // Local state for profile image URL
+    const [profileImage, setProfileImage] = useState(null);
+
+    // Handle logout
     const handleLogout = async () => {
         try {
             const response = await fetch(
@@ -36,20 +41,18 @@ const CustomDrawer = (props) => {
         }
     };
 
-    const profile = useSelector(selectProfile);
+    // Update profile image URL when profile changes
+    useEffect(() => {
+        if (profile?.profile?.user?.profileImage) {
+            const imagePath = profile.profile.user.profileImage.path;
+            setProfileImage(`http://192.168.29.188:5000/${imagePath}`);
+        }
+    }, [profile]);
+
     const name = profile?.profile?.user?.name;
     const email = profile?.profile?.user?.email;
     const role = profile?.profile?.user?.userdesignation;
-    const [image, setImage] = useState(profile?.profile?.user?.profileImage?.data ? `data:${profile.profile.user.profileImage.contentType};base64,${profile.profile.user.profileImage.data}` : null);
 
-
-    useEffect(() => {
-        if (profile?.profile?.user?.profileImage?.data) {
-          setImage(`data:${profile.profile.user.profileImage.contentType};base64,${profile.profile.user.profileImage.data}`);
-        }
-      }, []);
-
-      console.log(image)
     const drawerItems = [
         { label: "My Profile", screen: "Profile" },
         { label: "Manage Account", screen: null },
@@ -71,7 +74,6 @@ const CustomDrawer = (props) => {
         <DrawerContentScrollView
             contentContainerStyle={{
                 justifyContent: "space-between",
-                // alignItems: "center",
                 flexDirection: "column",
                 flex: 1,
             }}
@@ -88,18 +90,19 @@ const CustomDrawer = (props) => {
                 </TouchableOpacity>
 
                 <View style={styles.profileContainer}>
-                   {image ? (<Image
-                        source={require("../Assets/dashboard/Profile.png")}
-                        style={styles.profileImage}
-                        resizeMode="contain"
-                    />) :(
-                    <Image
-                    style={styles.profileImage}
-                    resizeMode="contain"
-                    source={{
-                    uri: image,
-                    }}
-                    />)}
+                    {profileImage ? (
+                        <Image
+                            style={styles.profileImage}
+                            resizeMode="contain"
+                            source={{ uri: profileImage }}
+                        />
+                    ) : (
+                        <Image
+                            source={require("../Assets/dashboard/Profile.png")}
+                            style={styles.profileImage}
+                            resizeMode="contain"
+                        />
+                    )}
                     <Text style={styles.profileName}>{name}</Text>
                     <Text style={styles.profileEmail}>{email}</Text>
                 </View>
@@ -152,7 +155,6 @@ const styles = StyleSheet.create({
         width: 70,
         height: 70,
         marginBottom: 10,
-        //backgroundColor: "#c8c3fd",
         borderRadius: 50,
     },
     profileName: {

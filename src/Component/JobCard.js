@@ -5,7 +5,8 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from 'react-redux';
 import { setProfile, selectProfile } from "../Reduxtoolkit/profileSlice";
 
-const JobHeader = ({ data, cardType }) => (
+
+const JobHeader = ({ data, cardType, navigation }) => (
     <View style={styles.headerContainer}>
         <View style={styles.header}>
             <Image
@@ -45,10 +46,12 @@ const JobHeader = ({ data, cardType }) => (
                 style={styles.icon}
             />
             {cardType === "recent" && (
+                <TouchableOpacity onPress={()=>{navigation.navigate('CreateJobScreen1', {jobDetail :data})}}>
                 <Image
                     source={require("../Assets/dashboard/share.png")}
                     style={styles.icon}
                 />
+                </TouchableOpacity>
             )}
         </View>
     </View>
@@ -66,7 +69,7 @@ const JobTags = ({ data }) => (
 
 const JobCard = ({ cardType, cardStyles, data, onPress, HRCandidate }) => {
     const navigation = useNavigation();
-    console.log(data);
+    // console.log("sunao bhaiya", data);
 
     return (
         <TouchableOpacity
@@ -74,7 +77,7 @@ const JobCard = ({ cardType, cardStyles, data, onPress, HRCandidate }) => {
             onPress={() => {
                 navigation.navigate("JobDetails", { job: data, HRCandidate:HRCandidate});
             }}>
-            <JobHeader data={data} cardType={cardType} />
+            <JobHeader data={data} cardType={cardType} navigation={navigation} />
             <View style={styles.bodyContainer}>
                 {cardType === "featured" && (
                     <>

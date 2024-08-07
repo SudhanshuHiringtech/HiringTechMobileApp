@@ -1,4 +1,4 @@
-import React, { useState, useRef , useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, StyleSheet, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor';
@@ -6,23 +6,22 @@ import HeaderWithLogo from '../../Component/HeaderWithLogo';
 
 const JobDescriptionScreen = ({ navigation, route }) => {
   const richText = useRef();
-  const [description, setDescription] = useState('');
-  const [jobDetails, setJobDetails] = useState({});
-
-  const jobData = route.params.jobDetails;
-  console.log("data laya hai🥳", jobData)
+  const [jobDescription, setJobDescription] = useState(route.params?.jobDetails?.jobDescription || '');
+  const [jobDetails, setJobDetails] = useState(route?.params?.jobDetails || {});
+  const [initialLoad, setInitialLoad] = useState(true);
 
   const handleSubmit = () => {
-      setJobDetails({...jobData, description})
-     //navigation.navigate('CreateJobScreen4')
-  }
+    setJobDetails({ ...jobDetails, jobDescription });
+  };
+
   useEffect(() => {
-    if (Object.keys(jobDetails).length > 0) {
+    if (initialLoad) {
+      setInitialLoad(false);
+    } else if (Object.keys(jobDetails).length > 0) {
       console.log("Updated jobDetails: ", jobDetails);
       navigation.navigate('CreateJobScreen4', { jobDetails });
     }
   }, [jobDetails]);
-  
 
   return (
     <KeyboardAvoidingView
@@ -61,13 +60,13 @@ const JobDescriptionScreen = ({ navigation, route }) => {
               ref={richText}
               style={styles.richEditor}
               placeholder="Write your job description here..."
-              initialContentHTML={description}
-              onChange={setDescription}
+              initialContentHTML={jobDescription}
+              onChange={setJobDescription}
             />
           </View>
         </ScrollView>
         <View style={styles.footer}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('CreateJobScreen1')}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('CreateJobScreen2', { jobDetails })}>
             <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.continueButton} onPress={handleSubmit}>
@@ -82,7 +81,7 @@ const JobDescriptionScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    paddingBottom: 20, // Ensure padding at the bottom for better spacing
+    paddingBottom: 20,
   },
   headerContainer: {
     marginBottom: 16,
@@ -127,7 +126,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: '40%',
     height: '100%',
-
     alignItems: 'center',
     borderRadius: 20,
   },

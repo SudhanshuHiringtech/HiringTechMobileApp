@@ -20,7 +20,7 @@ const Login = ({route}) =>{
         //navigation.navigate('Bottomtab');
     console.log('hello');
     try {
-      const response = await fetch('https://hiringtechb-2.onrender.com/login', {
+      const response = await fetch('https://hiringtechb-1.onrender.com/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ const Login = ({route}) =>{
         dispatch(setProfile(data));
       await AsyncStorage.setItem("token", data.token);
       await AsyncStorage.setItem('isLoggedIn',  JSON.stringify(true));
-
+     console.log(data)
      await AsyncStorage.setItem('Profile', JSON.stringify(data));
         navigation.navigate('Bottomtab');
         Alert.alert('Login Successful', `Welcome`);

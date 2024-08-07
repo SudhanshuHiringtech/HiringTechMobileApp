@@ -39,7 +39,7 @@ const HrRegistration = () => {
    //  }
 
     try {
-       const response = await fetch('https://hiringtechb-2.onrender.com/register-recruiter', {
+       const response = await fetch('https://hiringtechb-1.onrender.com/register-recruiter', {
          method: 'POST',
          headers: {
            'Content-Type': 'application/json',
