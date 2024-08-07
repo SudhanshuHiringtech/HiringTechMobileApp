@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MapView, { Marker } from 'react-native-maps';
+// import MapView, { Marker } from 'react-native-maps';
 // import { useGoogleCalendar } from './useGoogleCalendar'; // Custom hook to integrate with Google Calendar API
 
 const ScheduleInterview = () => {
@@ -171,7 +171,7 @@ const ScheduleInterview = () => {
       <Modal visible={showMapModal} transparent={true} animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.mapContainer}>
-            <MapView
+            {/* <MapView
               style={styles.map}
               initialRegion={{
                 latitude: location ? location.latitude : 37.78825,
@@ -181,7 +181,7 @@ const ScheduleInterview = () => {
               }}
             >
               {location && <Marker coordinate={location} />}
-            </MapView>
+            </MapView> */}
             <TouchableOpacity style={styles.closeButton} onPress={() => setShowMapModal(false)}>
               <Text style={styles.closeButtonText}>Close</Text>
             </TouchableOpacity>
