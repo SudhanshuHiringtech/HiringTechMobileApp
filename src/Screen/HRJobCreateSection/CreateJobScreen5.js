@@ -295,7 +295,9 @@ const CreateJobScreen5 = ({ navigation, route }) => {
   const [questions, setQuestions] = useState([]);
   const [filter, setFilter] = useState(false);
   const [jobDetails, setJobDetails] = useState({});
-
+  
+  const UpdateJob = route?.params?.UpdateJob
+  console.log("job update", UpdateJob)
   // Initialize state with route params when component mounts or route params change
   useEffect(() => {
     if (route.params?.jobDetail?.questions) {
@@ -340,7 +342,7 @@ const CreateJobScreen5 = ({ navigation, route }) => {
   const handleContinue = () => {
     const updatedJobDetails = { ...jobDetails, questions, filter };
     console.log('Updated jobDetails:', updatedJobDetails);
-    navigation.navigate('JobDetails', { job: updatedJobDetails, HRJobDescription: true });
+    navigation.navigate('JobDetails', { job: updatedJobDetails, HRJobDescription: true, UpdateJob });
   };
 
   return (

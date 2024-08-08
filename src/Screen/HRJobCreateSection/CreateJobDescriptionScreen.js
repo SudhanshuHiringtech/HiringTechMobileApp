@@ -9,6 +9,7 @@ const JobDescriptionScreen = ({ navigation, route }) => {
   const [jobDescription, setJobDescription] = useState(route.params?.jobDetails?.jobDescription || '');
   const [jobDetails, setJobDetails] = useState(route?.params?.jobDetails || {});
   const [initialLoad, setInitialLoad] = useState(true);
+  const UpdateJob = route?.params?.UpdateJob
 
   const handleSubmit = () => {
     setJobDetails({ ...jobDetails, jobDescription });
@@ -19,7 +20,7 @@ const JobDescriptionScreen = ({ navigation, route }) => {
       setInitialLoad(false);
     } else if (Object.keys(jobDetails).length > 0) {
       console.log("Updated jobDetails: ", jobDetails);
-      navigation.navigate('CreateJobScreen4', { jobDetails });
+      navigation.navigate('CreateJobScreen4', { jobDetails, UpdateJob });
     }
   }, [jobDetails]);
 

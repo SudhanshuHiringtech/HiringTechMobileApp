@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setProfile, selectProfile } from "../../Reduxtoolkit/profileSlice";
 
 
-const socket = io('http://192.168.29.188:5000');
+const socket = io('https://hiringtechb-2.onrender.com');
 
 const ChatScreen = ({route}) => {
 
@@ -42,7 +42,7 @@ const ChatScreen = ({route}) => {
     console.log("dekho ", data)
   if(InviteAPI == true){
     try {
-      const response = await fetch('http://192.168.29.188:5000/invited-people', {
+      const response = await fetch('hhttps://hiringtechb-2.onrender.com/invited-people', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -65,7 +65,7 @@ const ChatScreen = ({route}) => {
   const markMessageAsRead = async (messageId) => {
     console.log("fvdz")
     try {
-      const response = await fetch(`http://192.168.29.188:5000/messages/${messageId}/read`, {
+      const response = await fetch(`https://hiringtechb-2.onrender.com/messages/${messageId}/read`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ const ChatScreen = ({route}) => {
 
     const fetchChatHistory = async () => {
       try {
-        const response = await axios.get(`http://192.168.29.188:5000/history/${senderId}/${receiverId}`);
+        const response = await axios.get(`https://hiringtechb-2.onrender.com/history/${senderId}/${receiverId}`);
         setMessages(response.data);
       } catch (error) {
         console.error('Failed to fetch chat history:', error);

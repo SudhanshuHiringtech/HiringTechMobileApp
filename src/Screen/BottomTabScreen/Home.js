@@ -4,19 +4,17 @@ import {
     View,
     Text,
     Image,
-    TouchableOpacity,
     ImageBackground,
     ScrollView,
     FlatList,
     StyleSheet,
     Dimensions,
-    ActivityIndicator, // Import ActivityIndicator for loader
+    ActivityIndicator,
+    RefreshControl,
 } from "react-native";
 import JobCard from "../../Component/JobCard";
 import HeaderWithLogo from "../../Component/HeaderWithLogo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_ROUTES } from '../../../apiCofig';
-
 
 const { width, height } = Dimensions.get("window");
 
@@ -59,34 +57,29 @@ const Home = () => {
     const navigation = useNavigation();
     const [jobsData, setJobsData] = useState([]);
     const [profile, setProfile] = useState(null);
-    const [checkStatus, setCheckStatus] = useState();
-    const [loading, setLoading] = useState(true); // State for loading
-    async function fetchJobs() {
-        try {
-            const response = await fetch(
-                "https://hiringtechb-2.onrender.com/getalljobs"
-            );
+    const [checkStatus, setCheckStatus] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
+    const fetchJobs = async () => {
+        try {
+            const response = await fetch("https://hiringtechb-2.onrender.com/getalljobs");
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
             const pro = await AsyncStorage.getItem("Profile");
             const profile = JSON.parse(pro);
             setProfile(profile);
-          //  console.log("Designation", profile?.user?.userdesignation);
             setCheckStatus(profile?.user?.userdesignation);
             const data = await response.json();
-            //console.log('Data received:', data);
             setJobsData(data);
         } catch (error) {
-            console.error(
-                "There was a problem with the fetch operation:",
-                error
-            );
+            console.error("There was a problem with the fetch operation:", error);
         } finally {
-            setLoading(false); // Set loading to false after fetch
+            setLoading(false);
+            setRefreshing(false);
         }
-    }
+    };
 
     useEffect(() => {
         fetchJobs();
@@ -96,24 +89,50 @@ const Home = () => {
         // Handle card press, e.g., navigate to details
     };
 
+    const onRefresh = () => {
+        setRefreshing(true);
+        fetchJobs();
+    };
+
+    if (loading || checkStatus === null) {
+        return (
+            <View style={styles.loaderContainer}>
+                <ActivityIndicator size="large" color="orange" />
+            </View>
+        );
+    }
+
+    const getRoleBasedContent = () => {
+        if (checkStatus === 'candidate') {
+            console.log("hello candidate");
+            return {
+                image: require('../../Assets/dashboard/welcome.png'), 
+            };
+        } else {
+            console.log("hello HR");
+            return {
+                image: require('../../Assets/WelcomeBanner.png'), 
+            };
+        }
+    };
+
+    const { image } = getRoleBasedContent();
+
     return (
         <View style={styles.container}>
-            <ScrollView>
-                <HeaderWithLogo
-                    imageSource={require("../../Assets/dashboard/Logo.png")}
-                    image={false}
-                />
+            <ScrollView
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
+            >
+                <HeaderWithLogo imageSource={require("../../Assets/dashboard/Logo.png")} image={false} />
                 <View style={styles.welcomeContainer}>
                     <ImageBackground
-                        source={
-                            checkStatus === "candidate"
-                                ? require("../../Assets/dashboard/welcome.png")
-                                : require("../../Assets/WelcomeBanner.png")
-                        }
+                        source={image}
                         style={styles.welcomeBackground}
-                        resizeMode="cover">
+                        resizeMode="cover"
+                    >
                         <Text style={styles.dateText}>
-                            {/*show full day name, followed by date, month and year*/}
                             {new Date().toLocaleDateString("en-IN", {
                                 weekday: "long",
                                 year: "numeric",
@@ -122,9 +141,7 @@ const Home = () => {
                             })}
                         </Text>
                         <Text style={styles.welcomeText}>Welcome back,</Text>
-                        <Text style={styles.nameText}>
-                            {profile?.user?.name}
-                        </Text>
+                        <Text style={styles.nameText}>{profile?.user?.name}</Text>
                         <Text style={styles.subtitleText}>
                             Ready to Land Your Dream Career? Let's Help!
                         </Text>
@@ -134,32 +151,21 @@ const Home = () => {
                 <View style={styles.talentContainer}>
                     <Text style={styles.sectionTitle}>Talent Talks</Text>
                     <View style={styles.talentCardsContainer}>
-                        {talentCardData.map((card, index) => (
+                        {talentCardData.map((card) => (
                             <ImageBackground
                                 key={card.id}
                                 source={card.background}
                                 style={styles.talentCardImage}
-                                resizeMode="stretch">
+                                resizeMode="stretch"
+                            >
                                 <View style={styles.talentCardContent}>
-                                    <Image
-                                        source={card.image}
-                                        style={styles.cardImage}
-                                    />
+                                    <Image source={card.image} style={styles.cardImage} />
                                     <View style={styles.talentCardText}>
-                                        <Text style={styles.talentCardNumber}>
-                                            {card.number}
-                                        </Text>
-                                        <Text style={styles.talentCardLabel}>
-                                            {card.labels[0]}
-                                        </Text>
-                                        <Text style={styles.talentCardLabel}>
-                                            {card.labels[1]}
-                                        </Text>
+                                        <Text style={styles.talentCardNumber}>{card.number}</Text>
+                                        <Text style={styles.talentCardLabel}>{card.labels[0]}</Text>
+                                        <Text style={styles.talentCardLabel}>{card.labels[1]}</Text>
                                     </View>
-                                    <Image
-                                        source={card.arrow}
-                                        style={styles.talentCardArrow}
-                                    />
+                                    <Image source={card.arrow} style={styles.talentCardArrow} />
                                 </View>
                             </ImageBackground>
                         ))}
@@ -169,24 +175,17 @@ const Home = () => {
                 <View style={styles.featuredJobsContainer}>
                     <View style={styles.sectionHeaderContainer}>
                         <Text style={styles.sectionTitle}>Featured Jobs</Text>
-                        <Text
-                            style={styles.sectionSubtitle}>{`See all >`}</Text>
+                        <Text style={styles.sectionSubtitle}>{`See all >`}</Text>
                     </View>
                     {loading ? (
-                        <ActivityIndicator
-                            size="large"
-                            color="orange"
-                            style={styles.loader}
-                        />
+                        <ActivityIndicator size="large" color="orange" style={styles.loader} />
                     ) : (
                         <FlatList
                             data={jobsData}
                             horizontal
                             showsHorizontalScrollIndicator={false}
                             keyExtractor={(item) => item.id}
-                            contentContainerStyle={
-                                styles.featuredJobsContentContainer
-                            }
+                            contentContainerStyle={styles.featuredJobsContentContainer}
                             renderItem={({ item }) => (
                                 <JobCard
                                     data={item}
@@ -202,24 +201,17 @@ const Home = () => {
                 <View style={styles.recentJobsContainer}>
                     <View style={styles.sectionHeaderContainer}>
                         <Text style={styles.sectionTitle}>Recent Jobs</Text>
-                        <Text
-                            style={styles.sectionSubtitle}>{`See all >`}</Text>
+                        <Text style={styles.sectionSubtitle}>{`See all >`}</Text>
                     </View>
 
                     {loading ? (
-                        <ActivityIndicator
-                            size="large"
-                            color="orange"
-                            style={styles.loader}
-                        />
+                        <ActivityIndicator size="large" color="orange" style={styles.loader} />
                     ) : (
                         <FlatList
                             data={jobsData}
                             keyExtractor={(item) => item.id}
                             scrollEnabled={false}
-                            contentContainerStyle={
-                                styles.recentJobsContentContainer
-                            }
+                            contentContainerStyle={styles.recentJobsContentContainer}
                             renderItem={({ item }) => (
                                 <JobCard
                                     data={item}
@@ -327,7 +319,7 @@ const styles = StyleSheet.create({
         position: "relative",
     },
     talentCardText: {
-        // marginLeft: 10,
+        marginLeft: 10,
     },
     talentCardNumber: {
         fontSize: 22,
@@ -361,12 +353,12 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     featuredJobsContentContainer: {
-        paddingBottom: 20, // Ensure last card is fully visible
+        paddingBottom: 20,
         gap: 15,
     },
     recentJobsContainer: {},
     recentJobsContentContainer: {
-        paddingBottom: 20, // Ensure last card is fully visible
+        paddingBottom: 20,
         gap: 15,
     },
     jobCard: {
@@ -378,6 +370,11 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         height: height * 0.3,
+    },
+    loaderContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
     },
 });
 

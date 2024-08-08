@@ -255,7 +255,8 @@ import Jobtype from '../Jobtype';
 
 const CreateJobScreen1 = ({ route, navigation }) => {
   const jobDetail = route?.params?.jobDetail || {};
-  console.log("check code correctly 1", jobDetail)
+  const UpdateJob =  route?.params?.UpdateJob;
+  console.log("check code correctly 1", UpdateJob)
   const [jobTitle, setJobTitle] = useState(jobDetail.jobTitle || '');
   const [location, setLocation] = useState(jobDetail.location || '');
   const [jobType, setJobType] = useState(jobDetail.jobType ? [jobDetail.jobType] : []);
@@ -298,9 +299,9 @@ const CreateJobScreen1 = ({ route, navigation }) => {
   };
 
   const handleExperienceSelect = (exp) => {
-    setExperience(prev =>
-      prev.includes(exp) ? prev.filter(e => e !== exp) : [...prev, exp]
+    setExperience([exp]
     );
+    console.log("ds", experience)
   };
 
   const handleScheduleSelect = (sched) => {
@@ -318,6 +319,7 @@ const CreateJobScreen1 = ({ route, navigation }) => {
   };
  
   const handleCustomExperience = () => {
+     console.log("ds", experience)
     if (customExperience) {
       setExperience([...experience, customExperience]);
       setExperienceLevels([...experienceLevels, customExperience]);
@@ -340,16 +342,18 @@ const CreateJobScreen1 = ({ route, navigation }) => {
       closingDate,
     };
     console.log("Updated Job Application Data", updatedJobDetail);
-    navigation.navigate('CreateJobScreen2', { jobDetail: updatedJobDetail });
+    navigation.navigate('CreateJobScreen2', { jobDetail: updatedJobDetail, UpdateJob });
   };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
-      <View style={{ height: '8%', marginTop: 5 }}>
+      <View style={{width:'100%', alignItems:'center'}}>
+      <View style={{ height: '8%', marginTop: 5, width:'90%' }}>
         <HeaderWithLogo
           imageSource={require("../../Assets/dashboard/Logo.png")}
           image={false}
         />
+      </View>
       </View>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={{ color: 'orange', fontWeight: '500' }}>Create JOB Post</Text>

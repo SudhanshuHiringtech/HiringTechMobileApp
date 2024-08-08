@@ -5,7 +5,8 @@ import HeaderWithLogo from '../../Component/HeaderWithLogo';
 
 const CreateJobScreen2 = ({ navigation, route }) => {
   const jobDetail = route?.params?.jobDetail || {};
-
+  const UpdateJob = route?.params?.UpdateJob;
+  console.log(UpdateJob)
   const [jobDetails, setJobDetails] = useState(jobDetail);
   const [minPay, setMinPay] = useState(jobDetail.minPay || '');
   const [maxPay, setMaxPay] = useState(jobDetail.maxPay || '');
@@ -54,7 +55,7 @@ const CreateJobScreen2 = ({ navigation, route }) => {
       selectedBenefits,
     };
     console.log("Updated jobDetails: ", updatedJobDetails);
-    navigation.navigate('CreateJobDescriptionScreen', { jobDetails: updatedJobDetails });
+    navigation.navigate('CreateJobDescriptionScreen', { jobDetails: updatedJobDetails , UpdateJob });
   };
 
   return (

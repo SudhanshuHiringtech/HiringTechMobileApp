@@ -78,8 +78,11 @@ const JobDetailsScreen = ({ route, navigation }) => {
   const resume = profile?.profile?.user?.resume;
   const role = profile?.profile?.user?.userdesignation;
 
+  const UpdateJob = route.params.UpdateJob;
+  const NotShowButton = route.params.NotShowButton || false;
+
   const [isDisabled, setIsDisabled] = useState(role == 'candidate' ? true : false);
-  console.log("DDD", job)
+  console.log("DDD", UpdateJob)
 
 
   // Ensure applications is set correctly
@@ -409,18 +412,20 @@ useEffect(() => {
             <TouchableOpacity style={styles.applyButton} onPress={ApplyforJob} disabled={isButtonDisabled}>
               {isButtonDisabled ? (<Text style={styles.buttonText}>Applied</Text>) : (<Text style={styles.buttonText}>Apply</Text>)}
             </TouchableOpacity>
-          ) : !(HRCandidate === true) && role === 'recuriter' ? 
+          ) : UpdateJob == true && role === 'recuriter' ? 
           (
             <TouchableOpacity style={styles.applyButton} onPress={updateJobPost}>
             <Text style={styles.buttonText}>Update Job</Text>
           </TouchableOpacity>
           )
-          :
+          : NotShowButton == false && role === 'recuriter' ? 
           (
             <TouchableOpacity style={styles.applyButton} onPress={CreateJobApplication}>
               <Text style={styles.buttonText}>Create Job</Text>
             </TouchableOpacity>
-          )}
+          ) :
+            null
+          }
         </View>
       </View>
     </ScrollView>

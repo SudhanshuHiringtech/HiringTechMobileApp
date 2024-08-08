@@ -11,11 +11,10 @@ const Candidates = ({ navigation, route }) => {
   const jobId = route.params.item._id;
   const [section, setSection] = useState('open');
   const [check, setCheck] = useState(false);
-  const [candidateName, setCandidateName] = useState('');
 
-  const message = `Hi ${candidateName},
+  const message = `Hi [Candidate Name],
 
-  We are currently looking for talented individuals to join our team for the role of Based on your impressive background and experience, we believe you would be a great fit for this position.
+  We are currently looking for talented individuals to join our team for the role of [Job Role]. Based on your impressive background and experience, we believe you would be a great fit for this position.
   
   The role involves working on cutting-edge projects, collaborating with a team of skilled professionals, and contributing to innovative solutions that make a real impact.
   
@@ -58,6 +57,12 @@ const Candidates = ({ navigation, route }) => {
   };
 
   const CandidateCard = ({ item }) => {
+    const [showDropdown, setShowDropdown] = useState(false);
+
+    const handleDropdown = () => {
+      setShowDropdown(prevState => !prevState);
+    };
+
     return (
       <TouchableOpacity style={styles.container}>
         <View style={styles.head}>
@@ -71,7 +76,28 @@ const Candidates = ({ navigation, route }) => {
             >
               <Text style={styles.inviteText}>Invite</Text>
             </TouchableOpacity>
-            <Icon name="dots-vertical" size={22} color="#999" />
+            <View style={styles.ContainerDrop}>
+              <TouchableOpacity onPress={handleDropdown} style={styles.threeDots}>
+                <Icon style={styles.dots} name="dots-vertical" color="#999" />
+              </TouchableOpacity>
+
+              {showDropdown && (
+                <View style={styles.dropdown}>
+                  <TouchableOpacity onPress={() => navigation.navigate('ScheduleInterview')}>
+                 <Text style={styles.dropdownItem}>Schedule Interview</Text>
+                 </TouchableOpacity>
+                 <TouchableOpacity onPress={() => navigation.navigate('AllInterview')}>
+                  <Text style={styles.dropdownItem}>Shortlisting</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity>
+                  <Text style={styles.dropdownItem}>Hired</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity>
+                  <Text style={styles.dropdownItem}>Reject</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
           </View>
         </View>
         <View style={styles.details}>
@@ -289,6 +315,35 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     color: '#175574',
     textDecorationLine: 'underline',
+  },
+  ContainerDrop: {
+    justifyContent: 'right',
+    alignItems: 'center',
+  },
+  threeDots: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#ABE0F8',
+    padding: 2,
+  },
+  dots: {
+    fontSize: 20,
+  },
+  dropdown: {
+    position: 'absolute',
+    zIndex: 1,
+    right: 32,
+    width: 150,
+    top: -10,
+    backgroundColor: '#fff',
+    padding: 5,
+    elevation: 3,
+    borderRadius: 10,
+  },
+  dropdownItem: {
+    padding: 5,
+    color: '#175574',
   },
 });
 

@@ -32,7 +32,7 @@ const Login = ({route}) =>{
       });
       const data = await response.json();
       if (response.ok) {
-        dispatch(setProfile(data));
+      dispatch(setProfile(data));
       await AsyncStorage.setItem("token", data.token);
       await AsyncStorage.setItem('isLoggedIn',  JSON.stringify(true));
      console.log(data)
