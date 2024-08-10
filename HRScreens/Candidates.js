@@ -11,6 +11,9 @@ const Candidates = ({ navigation, route }) => {
   const jobId = route.params.item._id;
   const [section, setSection] = useState('open');
   const [check, setCheck] = useState(false);
+ console.log("dekho acche", route.params.item)
+ const job = route.params.item;
+  
 
   const message = `Hi [Candidate Name],
 
@@ -62,9 +65,13 @@ const Candidates = ({ navigation, route }) => {
     const handleDropdown = () => {
       setShowDropdown(prevState => !prevState);
     };
+    
+    const newQuestions = item.questions;
 
+    job.questions = newQuestions;
+    console.log("card", job)
     return (
-      <TouchableOpacity style={styles.container}>
+      <TouchableOpacity style={styles.container} onPress={()=>{navigation.navigate('JobDetails', { job: job, viwedApplication: true, NotShowButton: true})}}>
         <View style={styles.head}>
           <View style={styles.profile}>
             <Text style={styles.name}>{item.candidateName}</Text>
@@ -166,7 +173,7 @@ const Candidates = ({ navigation, route }) => {
         <CustomToggle section={section} setSection={setSection} leftSideTitle={leftSideTitle} rightSideTitle={rightSideTitle} />
       </View>
       <View style={styles.searchContainer}>
-        <TouchableOpacity style={styles.openJobsButton} onPress={() => navigation.navigate('SearchJobScreen')}>
+        <TouchableOpacity style={styles.openJobsButton}>
           <Text style={styles.openJobsText}>All the open and closed jobs</Text>
         </TouchableOpacity>
         <View style={styles.sortByContainer}>
