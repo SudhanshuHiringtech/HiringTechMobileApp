@@ -1,162 +1,161 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
-import { useSelector, useDispatch } from 'react-redux';
-import { setProfile, selectProfile } from "../Reduxtoolkit/profileSlice";
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import OTPTextInput from 'react-native-otp-textinput';
 
-const ChangePasswordScreen = ({navigation}) => {
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [isOldPasswordVisible, setIsOldPasswordVisible] = useState(false);
-  const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
-  
-  const profile = useSelector(selectProfile);
-  const candidateId = profile?.profile?.user?._id;
-  // console.log(candidateId)
+const ForgotPassword = ({ navigation }) => {  // Accept navigation prop
+    const [email, setEmail] = useState('');
+    const [otp, setOtp] = useState('');
+    const [otpSent, setOtpSent] = useState(false);
 
+    const handleSendOtp = async () => {
+        if (!email) {  // Check if email is empty
+            Alert.alert('Error', 'Please enter your email address.');
+            return;
+        }
 
-  const ChangePassword = async () => {
-    if(newPassword == oldPassword ==  confirmPassword){
-      Alert.alert('Filed is Empty')
-    }
+        try {
+            const response = await fetch('https://hiringtechb-1.onrender.com/forgot-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+            });
 
-   if(newPassword !== confirmPassword){
-      Alert.alert('Your Password does not match');
-   }
+            const data = await response.json();
+            console.log(data);
+            if (data) {
+                Alert.alert('Success', 'OTP sent to your email.');
+                setOtpSent(true);
+                
+                
+            } else {
+                Alert.alert('Failed', 'Could not send OTP. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            Alert.alert('Error', 'Failed to send OTP.');
+        }
+    };
 
-    try {
-      const response = await fetch('https://hiringtechb-1.onrender.com/change-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: candidateId,
-          newPassword: newPassword,
-          oldPassword : oldPassword
-        }),
-      });
-      const data = await response.json();
-      console.log(response);
-      if (response.ok) {
-        Alert.alert('Your Password Successfully Change');
-        navigation.navigate('Bottomtab');
-      } else {
-        Alert.alert('Change Password Failed', data.error);
-      }
-    } catch (error) {
-      console.error('Error during Password reset:', error);
-    }
-  }
+    const handleVerifyOtp = async () => {
+        if (!otp) {  // Check if email is empty
+            Alert.alert('Error', 'Please enter valid OTP .');
+            return;
+        }
 
-  const handlePasswordVisibility = (setVisibility, visibility) => {
-    setVisibility(!visibility);
-  };
+        try {
+            const response = await fetch('https://hiringtechb-1.onrender.com/verify-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, otp }),
+            });
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Change Password</Text>
+            const data = await response.json();
+            if (data) {
+                Alert.alert('Success', 'OTP verified');
+                navigation.navigate('ResetPassword'); // Navigate to the ResetPassword screen
+            } else {
+                Alert.alert('Error', data.message || 'Invalid OTP');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            Alert.alert('Error', 'Invalid OTP');
+        }
+    };
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Old Password</Text>
-        <View style={styles.inputWrapper}>
-          <TextInput
-            style={styles.input}
-            value={oldPassword}
-            onChangeText={setOldPassword}
-            secureTextEntry={!isOldPasswordVisible}
-            placeholder="Enter Old password"
-          />
-          <TouchableOpacity onPress={() => handlePasswordVisibility(setIsOldPasswordVisible, isOldPasswordVisible)}>
-            <Icon name={isOldPasswordVisible ? "eye" : "eye-off"} size={20} color="#000" />
-          </TouchableOpacity>
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>Forgot Password</Text>
+
+            <Text style={styles.label}>Email Address</Text>
+            <TextInput
+                value={email}
+                onChangeText={setEmail}
+                style={styles.input}
+                placeholder="Enter your email"
+                placeholderTextColor="#aaa"
+                keyboardType="email-address"
+                autoCapitalize="none"
+            />
+
+            {otpSent ? (
+                <>
+                    <Text style={styles.label}>Enter OTP</Text>
+                    <OTPTextInput 
+                        handleTextChange={setOtp} 
+                        inputCount={6} 
+                        containerStyle={styles.otpContainer} 
+                        textInputStyle={styles.otpInput}
+                    />
+
+                    <TouchableOpacity style={styles.button} onPress={handleVerifyOtp}>
+                        <Text style={styles.buttonText}>Verify OTP</Text>
+                    </TouchableOpacity>
+                </>
+            ) : (
+                <TouchableOpacity style={styles.button} onPress={handleSendOtp}>
+                    <Text style={styles.buttonText}>Send OTP</Text>
+                </TouchableOpacity>
+            )}
         </View>
-      </View>
-
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>New Password</Text>
-        <View style={styles.inputWrapper}>
-          <TextInput
-            style={styles.input}
-            value={newPassword}
-            onChangeText={setNewPassword}
-            secureTextEntry={!isNewPasswordVisible}
-            placeholder="Enter New password"
-          />
-          <TouchableOpacity onPress={() => handlePasswordVisibility(setIsNewPasswordVisible, isNewPasswordVisible)}>
-            <Icon name={isNewPasswordVisible ? "eye" : "eye-off"} size={20} color="#000" />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Confirm Password</Text>
-        <View style={styles.inputWrapper}>
-          <TextInput
-            style={styles.input}
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry={!isConfirmPasswordVisible}
-            placeholder="Re-enter password"
-          />
-          <TouchableOpacity onPress={() => handlePasswordVisibility(setIsConfirmPasswordVisible, isConfirmPasswordVisible)}>
-            <Icon name={isConfirmPasswordVisible ? "eye" : "eye-off"} size={20} color="#000" />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <TouchableOpacity style={styles.button} onPress={ChangePassword}>
-        <Text style={styles.buttonText}>Update</Text>
-      </TouchableOpacity>
-    </View>
-  );
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#FDEFEF',
-  },
-  header: {
-    fontSize: 30,
-    color:'black',
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 15,
-    color:'black',
-    fontWeight:'600',
-    marginBottom: 8,
-  },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'skyblue',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-  },
-  input: {
-    flex: 1,
-    paddingVertical: 10,
-  },
-  button: {
-    backgroundColor: 'orange',
-    borderRadius: 8,
-    paddingVertical: 12,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
+    container: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: '#f5f5f5',
+        justifyContent: 'center',
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 50,
+        color: '#333',
+        textAlign: 'center',
+    },
+    label: {
+        fontSize: 16,
+        color: '#333',
+        marginBottom: 10,
+    },
+    input: {
+        height: 50,
+        borderColor: '#ddd',
+        borderWidth: 1,
+        borderRadius: 8,
+        paddingHorizontal: 15,
+        fontSize: 16,
+        backgroundColor: '#fff',
+        marginBottom: 20,
+    },
+    otpContainer: {
+        marginBottom: 20,
+    },
+    otpInput: {
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#ddd',
+        height: 50,
+        fontSize: 16,
+        color: '#333',
+    },
+    button: {
+        backgroundColor: 'orange',
+        paddingVertical: 15,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
 });
 
-export default ChangePasswordScreen;
+export default ForgotPassword;
