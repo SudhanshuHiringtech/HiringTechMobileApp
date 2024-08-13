@@ -21,7 +21,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
    
   console.log("Dum Damak Dum Dumm", job);
   
-
+  const  viewedApplication = route?.params?.viwedApplication;
 
   const [webViewHeight, setWebViewHeight] = useState(0);
 
@@ -78,22 +78,25 @@ const JobDetailsScreen = ({ route, navigation }) => {
   const resume = profile?.profile?.user?.resume;
   const role = profile?.profile?.user?.userdesignation;
 
-  const [isDisabled, setIsDisabled] = useState(role == 'candidate' ? true : false);
-  console.log("DDD", job)
+  const UpdateJob = route.params.UpdateJob;
+  const NotShowButton = route.params.NotShowButton || false;
+
+  const [isDisabled, setIsDisabled] = useState(role === 'candidate' || viewedApplication === true);
+  console.log("DDD", UpdateJob)
 
 
   // Ensure applications is set correctly
 
 // Create  Job Here 
   const CreateJobApplication = async () => {
-    console.log({ ...jobDetail, questions })
+    console.log("check", { ...jobDetail, questions, recruiterId : candidateId})
     try {
-      const response = await fetch('https://hiringtechb-1.onrender.com/job-post', {
+      const response = await fetch('http://192.168.29.188:5000/job-post', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ ...jobDetail, questions }),
+        body: JSON.stringify({ ...jobDetail, questions, recruiterId : candidateId }),
       });
       const result = await response.json();
       if (response.status === 201) {
@@ -134,7 +137,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
 
   const ApplyforJob = async () => {
     try {
-      const response = await fetch('https://hiringtechb-1.onrender.com/apply-job', {
+      const response = await fetch('http://192.168.29.188:5000/apply-job', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -146,6 +149,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
           candidateProfileStatus: 'Applied',
           jobPost: jobId,
           resume: resume,
+          questions:questions,
           coverLetter: "I am excited to apply for the React Native Developer Engineer position..."
         }),
       });
@@ -167,10 +171,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
     setTimeout(function() { window.ReactNativeWebView.postMessage(document.body.scrollHeight); }, 500);
   `;
 
-  const addQuestion = () => {
-    const newQuestion = { questionId: questions.length + 1, question: '', answer: '', answerText: '' };
-    setQuestions([...questions, newQuestion]);
-  };
+
 
   const handleAnswerChange = (id, answer) => {
     setQuestions(questions.map(q => q.questionId === id ? { ...q, answer, answerText: answer === 'write' ? q.answerText : '' } : q));
@@ -370,6 +371,7 @@ useEffect(() => {
                   <Checkbox 
                     status={q.answer === 'yes' ? 'checked' : 'unchecked'} 
                     color={'orange'}
+                    disabled={viewedApplication}
                   />
                   <Text style={styles.optionText}>Yes</Text>
                 </TouchableOpacity>
@@ -380,28 +382,18 @@ useEffect(() => {
                   <Checkbox 
                     status={q.answer === 'no' ? 'checked' : 'unchecked'} 
                     color={'orange'} 
+                    disabled={viewedApplication}
                   />
                   <Text style={styles.optionText}>No</Text>
                 </TouchableOpacity>
-                {/* <TouchableOpacity 
-                  style={styles.option} 
-                  onPress={() => handleAnswerChange(q.questionId, 'write')}
-                >
-                  <Checkbox 
-                    status={q.answer === 'write' ? 'checked' : 'unchecked'} 
-                    color={'orange'}
-                  />
-                  <Text style={styles.optionText}>Write</Text>
-                </TouchableOpacity> */}
               </View>
-              {q.answer === 'write' && (
                 <TextInput
                   style={styles.answerInput}
+                  editable={!viewedApplication}
                   placeholder="Enter your answer"
                   value={q.answerText}
                   onChangeText={(text) => handleAnswerTextChange(q.questionId, text)}
                 />
-              )}
             </View>
           ))}
         <View style={styles.applyButtonContainer}>
@@ -409,18 +401,20 @@ useEffect(() => {
             <TouchableOpacity style={styles.applyButton} onPress={ApplyforJob} disabled={isButtonDisabled}>
               {isButtonDisabled ? (<Text style={styles.buttonText}>Applied</Text>) : (<Text style={styles.buttonText}>Apply</Text>)}
             </TouchableOpacity>
-          ) : !(HRCandidate === true) && role === 'recuriter' ? 
+          ) : UpdateJob == true && role === 'recuriter' ? 
           (
             <TouchableOpacity style={styles.applyButton} onPress={updateJobPost}>
             <Text style={styles.buttonText}>Update Job</Text>
           </TouchableOpacity>
           )
-          :
+          : NotShowButton == false && role === 'recuriter' ? 
           (
             <TouchableOpacity style={styles.applyButton} onPress={CreateJobApplication}>
               <Text style={styles.buttonText}>Create Job</Text>
             </TouchableOpacity>
-          )}
+          ) :
+            null
+          }
         </View>
       </View>
     </ScrollView>

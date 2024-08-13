@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState, useEffect, useRef } from 'react';
-import { View, FlatList, StyleSheet, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
+import { View, FlatList, StyleSheet, TouchableOpacity, Text, ActivityIndicator, RefreshControl } from 'react-native';
 import { useSelector } from 'react-redux';
 import { selectProfile } from "../../Reduxtoolkit/profileSlice";
 import HeaderWithLogo from "../../Component/HeaderWithLogo";
@@ -11,37 +11,44 @@ const Applied = () => {
   const navigation = useNavigation();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const profile = useSelector(selectProfile);
   const candidateId = profile?.profile?.user?._id;
 
   const refRBSheet = useRef();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`https://hiringtechb-2.onrender.com/appliedjobs/${candidateId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`https://hiringtechb-2.onrender.com/appliedjobs/${candidateId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        console.log("job", result);
-        setJobs(result);
-      } catch (err) {
-        console.log(err.message);
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    };
 
+      const result = await response.json();
+      console.log("job", result);
+      setJobs(result);
+    } catch (err) {
+      console.log(err.message);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, [candidateId]);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchData();
+  };
 
   if (loading) {
     return (
@@ -79,6 +86,12 @@ const Applied = () => {
             data={jobs}
             renderItem={({ item }) => <AppliedJobsCard job={item} />}
             keyExtractor={item => item?.id}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }
           />
         </View>
         <TouchableOpacity onPress={() => refRBSheet.current.open()}>

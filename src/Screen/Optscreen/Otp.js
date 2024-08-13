@@ -44,7 +44,7 @@ const Otp = ({ navigation, route }) => {
         const data = await response.json();
         console.log(data);
         setTimeout(() => {
-          navigation.navigate('Bottomtab');
+          navigation.navigate('Login', {item:2});
         }, 100);
       } else {
         throw new Error('Failed to verify OTP');

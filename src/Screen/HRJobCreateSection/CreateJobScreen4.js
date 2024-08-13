@@ -6,7 +6,9 @@ import HeaderWithLogo from '../../Component/HeaderWithLogo';
 
 
 const CreateJobScreen4 = ({navigation, route}) => {
-  const [skillsRequired, setskillsRequired] = useState([]);
+  
+  const jobData = route.params.jobDetails;
+  const [skillsRequired, setskillsRequired] = useState(jobData.skillsRequired || []);
   const [email, setEmail] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const [jobDetails, setJobDetails] = useState({});
@@ -15,6 +17,8 @@ const CreateJobScreen4 = ({navigation, route}) => {
     'Figma', 'UX Design', 'HTML', 'CSS', 'JavaScript', 'React.js', 'Node.js'
   ]);
 
+  const UpdateJob = route.params.UpdateJob;
+
   const toggleSkill = (skill) => {
     setskillsRequired((prevSkills) =>
       prevSkills.includes(skill)
@@ -22,8 +26,7 @@ const CreateJobScreen4 = ({navigation, route}) => {
         : [...prevSkills, skill]
     );
   };
-  const jobData = route.params.jobDetails;
-  console.log("data laya hai🥳", jobData)
+  console.log("data laya hai🥳", jobData.skillsRequired)
 
   const handleCustomSkillsSubmit = () => {
     if (customSkill) {
@@ -45,7 +48,7 @@ const CreateJobScreen4 = ({navigation, route}) => {
   useEffect(() => {
     if (Object.keys(jobDetails).length > 0) {
       console.log("Updated jobDetails: ", jobDetails);
-      navigation.navigate('CreateJobScreen5', { jobDetails });
+      navigation.navigate('CreateJobScreen5', { jobDetails , UpdateJob});
     }
   }, [jobDetails]);
 
@@ -69,12 +72,12 @@ const CreateJobScreen4 = ({navigation, route}) => {
           Let us know how important they are so that we can reach the right job seekers.
         </Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Add skills"
-          value={skillsRequired}
+        <Text style={{fontSize:20, fontWeight:'500', color:'back'}}>Skills</Text>
+          {/* // style={styles.input}
+          // placeholder="Add skills"
+          // value={skillsRequired}
           // Add functionality for adding skills
-        />
+       */}
 
         <View style={styles.skillsContainer}>
           {skillsList.map((skill) => (

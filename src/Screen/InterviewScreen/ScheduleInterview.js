@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import HeaderWithLogo from '../../Component/HeaderWithLogo';
 // import MapView, { Marker } from 'react-native-maps';
 // import { useGoogleCalendar } from './useGoogleCalendar'; // Custom hook to integrate with Google Calendar API
 
@@ -193,6 +194,12 @@ const ScheduleInterview = () => {
 
   return (
     <ScrollView style={styles.container}>
+       <View style={{ height: '6%', width: '95%' }}>
+          <HeaderWithLogo
+            image={false}
+            imageSource={require("../../../src/Assets/dashboard/Logo.png")} 
+          />
+        </View>
       <Text style={styles.connectCalendar}>Connect your calendar</Text>
       <Text style={styles.connectText}>Automatically prevent double-bookings and get new events added as they're scheduled</Text>
       <TouchableOpacity style={styles.calendarButton}>
@@ -256,10 +263,11 @@ const ScheduleInterview = () => {
         <TouchableOpacity >
         <Text style={styles.sectionTitle}>Notification 10 minutes before meet</Text>
         </TouchableOpacity>
-
+        <View style={{width:'98%', alignItems:'flex-end'}}>
         <TouchableOpacity style={styles.findTime} onPress={handleSave}>
           <Text style={styles.findTimeText}>Save</Text>
         </TouchableOpacity>
+        </View>
       </View>
 
       {renderGuestsModal()}
@@ -272,6 +280,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: "#fff"
   },
   connectCalendar: {
     color: '#175574',
@@ -464,9 +473,10 @@ const styles = StyleSheet.create({
   findTime: {
     backgroundColor: '#D79442',
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 20,
     alignItems: 'center',
     marginTop: 20,
+    width:'50%',
   },
   findTimeText: {
     color: '#fff',

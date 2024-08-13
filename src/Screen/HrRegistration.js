@@ -7,6 +7,7 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  Alert,
   ScrollView,
 } from "react-native";
 
@@ -21,7 +22,7 @@ const HrRegistration = () => {
   const navigation = useNavigation();
 
   const userdesignation = "recuriter";
-
+  
   const  handleRegister = async () => {
     console.log(name);
     console.log(email);
@@ -34,9 +35,9 @@ const HrRegistration = () => {
     if(password !== confirmPassword){
        Alert.alert('Incorrect', `Your password not match`);
     }
-   //  if(password.length <= 6){
-   //     Alert.alert('Invaild Password', `Your password incorrect formate`);
-   //  }
+    // if(password.length <= 6){
+    //    Alert.alert('Invaild Password', `Your password incorrect formate`);
+    // }
 
     try {
        const response = await fetch('https://hiringtechb-1.onrender.com/register-recruiter', {
@@ -65,6 +66,7 @@ const HrRegistration = () => {
         navigation.navigate('Otp', {email : email});
          Alert.alert('Successfully Register', `Welcome`);
        } else {
+        Alert.alert('Incorrect', data);
          console.error('registeration failed:', data.error);
        }
      } catch (error) {

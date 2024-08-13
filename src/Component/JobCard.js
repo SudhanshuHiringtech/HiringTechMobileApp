@@ -46,7 +46,7 @@ const JobHeader = ({ data, cardType, navigation }) => (
                 style={styles.icon}
             />
             {cardType === "recent" && (
-                <TouchableOpacity onPress={()=>{navigation.navigate('CreateJobScreen1', {jobDetail :data})}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('CreateJobScreen1', {jobDetail :data, UpdateJob:true})}}>
                 <Image
                     source={require("../Assets/dashboard/share.png")}
                     style={styles.icon}
@@ -69,13 +69,13 @@ const JobTags = ({ data }) => (
 
 const JobCard = ({ cardType, cardStyles, data, onPress, HRCandidate }) => {
     const navigation = useNavigation();
-    // console.log("sunao bhaiya", data);
+   // console.log("sunao bhaiya", HRCandidate);
 
     return (
         <TouchableOpacity
             style={[styles.container, cardStyles]}
             onPress={() => {
-                navigation.navigate("JobDetails", { job: data, HRCandidate:HRCandidate});
+                navigation.navigate("JobDetails", { job: data, NotShowButton: true});
             }}>
             <JobHeader data={data} cardType={cardType} navigation={navigation} />
             <View style={styles.bodyContainer}>
