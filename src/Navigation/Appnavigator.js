@@ -42,6 +42,8 @@ import SearchJobScreen from '../Screen/BottomTabScreen/SearchJobScreen';
 import Candidates from '../../HRScreens/Candidates';
 import forgotePassword from '../Screen/forgotePassword';
 import Notifications from '../Screen/Notification';
+import ChangePasswordScreen from '../Screen/ChangePasswordScreen';
+
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = ()=> {
@@ -64,7 +66,7 @@ const AppNavigator = ()=> {
       <Stack.Screen name="CandidateRegistration" component={CandidateRegistration} />
       <Stack.Screen name="HrRegistration" component={HrRegistration} />
       <Stack.Screen name="Bottomtab" component={Bottomtab} />
-      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <Stack.Screen name="ForgotPassword" component={forgotePassword} />
       <Stack.Screen name="Otp" component={Otp} />
       <Stack.Screen name="VerificationCode" component={VerificationCode} />
       <Stack.Screen name="Success" component={Success} />
