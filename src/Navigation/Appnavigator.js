@@ -41,112 +41,60 @@ import ChatScreen from '../Screen/Chat/ChatScreen';
 import SearchJobScreen from '../Screen/BottomTabScreen/SearchJobScreen';
 import Candidates from '../../HRScreens/Candidates';
 import forgotePassword from '../Screen/forgotePassword';
-
+import Notifications from '../Screen/Notification';
 const Stack = createNativeStackNavigator();
 
-const AppNavigator = () => {
-    const [isSplashVisible, setIsSplashVisible] = useState(true);
+const AppNavigator = ()=> {
+  const [isSplashVisible, setIsSplashVisible] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsSplashVisible(false);
+    }, 1000);
+  }, []);
+  return (
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsSplashVisible(false);
-        }, 1000); // Adjust the splash screen duration here
+      <Stack.Navigator screenOptions={{headerShown: false}} >
+      {/* {isSplashVisible && ( */}
+          <Stack.Screen name="SplashScreen" component={SplashScreen} />
+        {/* )} */}
+      <Stack.Screen name="Choosejob" component={Choosejob} />
+       <Stack.Screen name="Jobtype" component={Jobtype} />
+       <Stack.Screen name="Preferences" component={Preferences} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="CandidateRegistration" component={CandidateRegistration} />
+      <Stack.Screen name="HrRegistration" component={HrRegistration} />
+      <Stack.Screen name="Bottomtab" component={Bottomtab} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <Stack.Screen name="Otp" component={Otp} />
+      <Stack.Screen name="VerificationCode" component={VerificationCode} />
+      <Stack.Screen name="Success" component={Success} />
+      {/* <Stack.Screen name="Countryname" component={Countryname} /> */}
+      {/* <Stack.Screen name="SetupResume" component={SetupResume} />
+      <Stack.Screen name="ChandidateProfile" component={ChandidateProfile} /> */}
+      <Stack.Screen name="ChangePasswordScreen" component={ChangePasswordScreen} />
+      <Stack.Screen name="AddComplaintScreen" component={AddComplaintScreen} />
+      <Stack.Screen name="ComplaintRegisterScreen" component={ComplaintRegisterScreen} />
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="CreateJobScreen1" component={CreateJobScreen1} />
+      <Stack.Screen name="CreateJobScreen2" component={CreateJobScreen2} />
+      <Stack.Screen name= "CreateJobDescriptionScreen" component={CreateJobDescriptionScreen} />
+      <Stack.Screen name="CreateJobScreen4" component={CreateJobScreen4} />
+      <Stack.Screen name="CreateJobScreen5" component={CreateJobScreen5} />
+      <Stack.Screen name="PersonalDetails" component={PersonalDetails} />
+      <Stack.Screen name="Education" component={Education} />
+      <Stack.Screen name="WorkExperience" component={WorkExperience} />
+      <Stack.Screen name="JobDetails" component={JobDetailsScreen} />
+      <Stack.Screen name="ChatScreen" component={ChatScreen}/>
+      <Stack.Screen name="ScheduleInterview" component={ScheduleInterview}/>
+      <Stack.Screen name="AllInterview" component={AllInterview}/>
+      <Stack.Screen name="Candidate" component={Candidates} />
+      <Stack.Screen name="Notifications" component={Notifications} />
+      <Stack.Screen name="forgotePassword" component={forgotePassword} />
+      <Stack.Screen name="ResetPassword" component={ResetPassword} />
+      </Stack.Navigator>
+  )
 
-        return () => clearTimeout(timer);
-    }, []);
-
-    return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {isSplashVisible ? (
-                <Stack.Screen name="SplashScreen" component={SplashScreen} />
-            ) : (
-                <>
-                    <Stack.Screen name="Choosejob" component={Choosejob} />
-                    <Stack.Screen name="Jobtype" component={Jobtype} />
-                    <Stack.Screen name="Preferences" component={Preferences} />
-                    <Stack.Screen name="Login" component={Login} />
-                    <Stack.Screen name="CandidateRegistration" component={CandidateRegistration} />
-                    <Stack.Screen name="HrRegistration" component={HrRegistration} />
-                    <Stack.Screen name="Bottomtab" component={Bottomtab} />
-                    {/* <Stack.Screen name="ForgotPassword" component={ForgotPassword} /> */}
-                    <Stack.Screen name="Otp" component={Otp} />
-                    <Stack.Screen name="VerificationCode" component={VerificationCode} />
-                    <Stack.Screen name="Success" component={Success} />
-                    {/* <Stack.Screen name="RequestOTP" component={RequestOTP} /> */}
-                    <Stack.Screen name="AddComplaintScreen" component={AddComplaintScreen} />
-                    <Stack.Screen name="ComplaintRegisterScreen" component={ComplaintRegisterScreen} />
-                    <Stack.Screen name="Profile" component={Profile} />
-                    <Stack.Screen name="CreateJobScreen1" component={CreateJobScreen1} />
-                    <Stack.Screen name="CreateJobScreen2" component={CreateJobScreen2} />
-                    <Stack.Screen name="CreateJobDescriptionScreen" component={CreateJobDescriptionScreen} />
-                    <Stack.Screen name="CreateJobScreen4" component={CreateJobScreen4} />
-                    <Stack.Screen name="CreateJobScreen5" component={CreateJobScreen5} />
-                    <Stack.Screen name="PersonalDetails" component={PersonalDetails} />
-                    <Stack.Screen name="Education" component={Education} />
-                    <Stack.Screen name="WorkExperience" component={WorkExperience} />
-                    <Stack.Screen name="JobDetails" component={JobDetailsScreen} />
-                    <Stack.Screen name="ChatScreen" component={ChatScreen} />
-                    <Stack.Screen name="ScheduleInterview" component={ScheduleInterview} />
-                    <Stack.Screen name="AllInterview" component={AllInterview} />
-                    <Stack.Screen name="Candidate" component={Candidates} />
-                    <Stack.Screen name="forgotePassword" component={forgotePassword
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    } />
-                    <Stack.Screen name="ResetPassword" component={ResetPassword} />
-
-                </>
-            )}
-        </Stack.Navigator>
-    );
-};
+}
 
 export default AppNavigator;
+

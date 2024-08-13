@@ -24,10 +24,12 @@ const HeaderWithLogo = ({ imageSource, text, image }) => {
                 </View>
             )}
             <View style={styles.headerIcons}>
+                <TouchableOpacity onPress={() => navigation.navigate('Notifications')}>
                 <Image
                     source={require("../Assets/dashboard/bellIcon.png")}
                     style={styles.bellIcon}
                 />
+                </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.profileButton}
                     onPress={() => {

@@ -23,12 +23,15 @@ import {name as appName} from './app.json';
 import { Provider } from 'react-redux';
 import {Provider as PaperProvider} from 'react-native-paper';
 import { store } from './src/Reduxtoolkit/store';
+import { AuthProvider } from './AuthContext';
 
 const HiringTechApp = () => (
     <Provider store={store}>
-        <PaperProvider>
-            <App />
-        </PaperProvider>
+        <AuthProvider> 
+          <PaperProvider>
+              <App />
+          </PaperProvider>
+        </AuthProvider> 
     </Provider>
 );
 

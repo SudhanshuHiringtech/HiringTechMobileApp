@@ -18,8 +18,39 @@ const Internships = () => {
     skillsList: [],
   });
 
+
+    // Function to fetch jobs based on filters
+  async function fetchFilteredJobs(filters) {
+      setLoading(true);
+      try {
+        const queryParams = new URLSearchParams({
+          title: filters.jobTitle,
+          company: filters.company,
+          techStack: filters.skillsList.length > 0 ? filters.skillsList.join(',') : undefined,
+          experienceRequired: filters.experience,
+          location: filters.location,
+          workMode: filters.jobMode,
+        }).toString();
+  
+        const response = await fetch(`https://hiringtechb-1.onrender.com/filterjobs?${queryParams}`);
+        
+        // if (!response.ok) {
+        //   throw new Error('Network response was not ok');
+        // }
+        const data = await response.json();
+        console.log('Filtered internship jobs:', data);
+        setJobs(data);
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
   const handleApply = (data) => {
     console.log('Filter Data:', data);
+    setFilterData(data);
+    fetchFilteredJobs(data);
     // Call your API or handle the filter data as needed
   };
 
@@ -35,6 +66,7 @@ const Internships = () => {
       company: '',
       skillsList: [],
     });
+    
   };
 
   const refRBSheet = useRef();
@@ -58,7 +90,6 @@ const Internships = () => {
 
   useEffect(() => {
     fetchJobs();
-    console.log("Google");
   }, []);
 
   return (
