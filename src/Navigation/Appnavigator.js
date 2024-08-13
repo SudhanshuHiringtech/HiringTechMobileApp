@@ -19,7 +19,7 @@ import SetupResume from '../Screen/Resume/SetupResume';
 import Otp from '../Screen/Optscreen/Otp';
 import VerificationCode from '../Screen/Optscreen/VerificationCode';
 import Success from '../Screen/Optscreen/Success';
-import ForgotPassword from '../Screen/Resume/ForgotPassword';   
+// import ForgotPassword from '../Screen/Resume/ForgotPassword';   
 import Bottomtab from './Bottomtab';
 import Profile from '../Screen/Profile';
 import SplashScreen from '../Screen/SplashScreen';
@@ -68,7 +68,7 @@ const AppNavigator = () => {
                     <Stack.Screen name="CandidateRegistration" component={CandidateRegistration} />
                     <Stack.Screen name="HrRegistration" component={HrRegistration} />
                     <Stack.Screen name="Bottomtab" component={Bottomtab} />
-                    <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+                    {/* <Stack.Screen name="ForgotPassword" component={ForgotPassword} /> */}
                     <Stack.Screen name="Otp" component={Otp} />
                     <Stack.Screen name="VerificationCode" component={VerificationCode} />
                     <Stack.Screen name="Success" component={Success} />
@@ -89,7 +89,58 @@ const AppNavigator = () => {
                     <Stack.Screen name="ScheduleInterview" component={ScheduleInterview} />
                     <Stack.Screen name="AllInterview" component={AllInterview} />
                     <Stack.Screen name="Candidate" component={Candidates} />
-                    <Stack.Screen name="forgotePassword" component={forgotePassword} />
+                    <Stack.Screen name="forgotePassword" component={forgotePassword
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    } />
                     <Stack.Screen name="ResetPassword" component={ResetPassword} />
 
                 </>
