@@ -40,7 +40,7 @@ import AllInterview from '../Screen/InterviewScreen/AllInterview';
 import ChatScreen from '../Screen/Chat/ChatScreen';
 import SearchJobScreen from '../Screen/BottomTabScreen/SearchJobScreen';
 import Candidates from '../../HRScreens/Candidates';
-import ChangePasswordScreen from '../Screen/ChangePasswordScreen';
+import ChangePasswordScreen from '../Screen/forgotePassword';
 
 const Stack = createNativeStackNavigator();
 
