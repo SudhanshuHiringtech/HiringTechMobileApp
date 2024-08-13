@@ -4,17 +4,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setProfile, selectProfile } from "../Reduxtoolkit/profileSlice";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, Alert } from "react-native";
+
 import GoogleAuth from "../Component/GoogleAuth"; // Import the GoogleAuth component
 
-const Login = ({ route }) => {
-    const [Email, setEmail] = useState("");
-    const [Password, setPassword] = useState("");
-    const [isGoogleAuthVisible, setIsGoogleAuthVisible] = useState(false); // State to control GoogleAuth rendering
-    const navigation = useNavigation();
-    const { item } = route?.params;
+// const Login = ({ route }) => {
+//     const [Email, setEmail] = useState("");
+//     const [Password, setPassword] = useState("");
+//     const [isGoogleAuthVisible, setIsGoogleAuthVisible] = useState(false); // State to control GoogleAuth rendering
+//     const navigation = useNavigation();
+//     const { item } = route?.params;
 
-    const dispatch = useDispatch();
-    const profile = useSelector(selectProfile);
+
+const Login = ({ route }) => {
+  const [Email, setEmail] = useState(""); 
+  const [Password, setPassword] = useState("");
+  const [isVisiblejob, setIsVisibleJob] = useState(true);
+  const [isVisibleHire, setIsVisibleHire] = useState(false);
+  const navigation = useNavigation();
+  const { item } = route?.params;
 
     const handleLogin = async () => {
         try {
@@ -240,6 +247,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: 'orange',
     },
+
 });
 
 export default Login;
