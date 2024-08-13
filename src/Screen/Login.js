@@ -96,7 +96,7 @@ const Login = ({ route }) => {
             Alert.alert('Reset Password', 'Redirecting to reset password page.');
           }}
         >
-          <Text style={{ color: 'orange', fontWeight: '500' }}  onPress={() => navigation.navigate('ChangePasswordScreen')}>Forgotten Password</Text>
+          <Text style={{ color: 'orange', fontWeight: '500' }}  onPress={() => navigation.navigate('forgotePassword')}>Forgotten Password</Text>
         </TouchableOpacity>
 
         <View style={[styles.rememberViewStyle]}>

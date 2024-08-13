@@ -40,7 +40,7 @@ import AllInterview from '../Screen/InterviewScreen/AllInterview';
 import ChatScreen from '../Screen/Chat/ChatScreen';
 import SearchJobScreen from '../Screen/BottomTabScreen/SearchJobScreen';
 import Candidates from '../../HRScreens/Candidates';
-import ChangePasswordScreen from '../Screen/forgotePassword';
+import forgotePassword from '../Screen/forgotePassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -89,7 +89,7 @@ const AppNavigator = () => {
                     <Stack.Screen name="ScheduleInterview" component={ScheduleInterview} />
                     <Stack.Screen name="AllInterview" component={AllInterview} />
                     <Stack.Screen name="Candidate" component={Candidates} />
-                    <Stack.Screen name="ChangePasswordScreen" component={ChangePasswordScreen} />
+                    <Stack.Screen name="forgotePassword" component={forgotePassword} />
                     <Stack.Screen name="ResetPassword" component={ResetPassword} />
 
                 </>
