@@ -65,7 +65,7 @@ const ForgotPassword = ({ navigation }) => {  // Accept navigation prop
             Alert.alert('Error', 'Invalid OTP');
         }
     };
-
+ 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Forgot Password</Text>

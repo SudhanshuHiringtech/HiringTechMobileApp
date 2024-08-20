@@ -43,6 +43,8 @@ import Candidates from '../../HRScreens/Candidates';
 import forgotePassword from '../Screen/forgotePassword';
 import Notifications from '../Screen/Notification';
 import ChangePasswordScreen from '../Screen/ChangePasswordScreen';
+import DeleteAcoount from '../Component/DeleteAcoountScreen';
+import DeActivate from '../Component/DeActivate';
 
 const Stack = createNativeStackNavigator();
 
@@ -93,6 +95,9 @@ const AppNavigator = ()=> {
       <Stack.Screen name="Notifications" component={Notifications} />
       <Stack.Screen name="forgotePassword" component={forgotePassword} />
       <Stack.Screen name="ResetPassword" component={ResetPassword} />
+      <Stack.Screen name="DeleteAcoount" component={DeleteAcoount} />
+      <Stack.Screen name="DeActivate" component={DeActivate} />
+
       </Stack.Navigator>
   )
 

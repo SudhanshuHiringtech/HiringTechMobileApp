@@ -60,6 +60,7 @@ const CustomDrawer = (props) => {
         { label: "Report a complaint", screen: "AddComplaintScreen" },
         { label: "Safety Tips", screen: null },
         { label: "About Hiring tech", screen: null },
+        { label: "Delete Account", screen: 'DeleteAcoount' },
         { label: "Logout", action: handleLogout },
     ];
 
