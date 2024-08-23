@@ -5,7 +5,7 @@ import { setProfile } from "../Reduxtoolkit/profileSlice";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, Alert } from "react-native";
 import GoogleAuth from "../Component/GoogleAuth"; // Import the GoogleAuth component
-
+import { theme, Theme } from './Theme'
 const Login = ({ route }) => {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
@@ -13,6 +13,7 @@ const Login = ({ route }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch(); // Get the dispatch function
   const { item } = route?.params;
+
 
   const handleLogin = async () => {
     try {
@@ -209,6 +210,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: 'orange',
+    // backgroundColor:theme.primaryColor
   },
 });
 

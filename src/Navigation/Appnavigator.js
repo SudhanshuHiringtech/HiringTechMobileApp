@@ -40,7 +40,7 @@ import AllInterview from '../Screen/InterviewScreen/AllInterview';
 import ChatScreen from '../Screen/Chat/ChatScreen';
 import SearchJobScreen from '../Screen/BottomTabScreen/SearchJobScreen';
 import Candidates from '../../HRScreens/Candidates';
-import forgotePassword from '../Screen/forgotePassword';
+// import forgotePassword from '../Screen/forgotePassword';
 import Notifications from '../Screen/Notification';
 import ChangePasswordScreen from '../Screen/ChangePasswordScreen';
 import DeleteAcoount from '../Component/DeleteAcoountScreen';
@@ -68,7 +68,7 @@ const AppNavigator = ()=> {
       <Stack.Screen name="CandidateRegistration" component={CandidateRegistration} />
       <Stack.Screen name="HrRegistration" component={HrRegistration} />
       <Stack.Screen name="Bottomtab" component={Bottomtab} />
-      <Stack.Screen name="ForgotPassword" component={forgotePassword} />
+      {/* <Stack.Screen name="ForgotPassword" component={forgotePassword} />/ */}
       <Stack.Screen name="Otp" component={Otp} />
       <Stack.Screen name="VerificationCode" component={VerificationCode} />
       <Stack.Screen name="Success" component={Success} />
@@ -93,7 +93,7 @@ const AppNavigator = ()=> {
       <Stack.Screen name="AllInterview" component={AllInterview}/>
       <Stack.Screen name="Candidate" component={Candidates} />
       <Stack.Screen name="Notifications" component={Notifications} />
-      <Stack.Screen name="forgotePassword" component={forgotePassword} />
+      {/* <Stack.Screen name="forgotePassword" component={forgotePassword} /> */}
       <Stack.Screen name="ResetPassword" component={ResetPassword} />
       <Stack.Screen name="DeleteAcoount" component={DeleteAcoount} />
       <Stack.Screen name="DeActivate" component={DeActivate} />
