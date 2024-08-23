@@ -87,7 +87,7 @@ const Login = ({ route }) => {
             <Text> {ShowPassword?  <Icon name="eye" size={20} color="#175574" /> :   <Icon name="eye-off" size={20} color="#175574" />}</Text>
             </TouchableOpacity>
         </View>
-        <View style={styles.ForgotPassword}>
+        <View style={styles.ForgotPassword} onPress={() => navigation.navigate('forgotePassword')} >
           <Text>Forgotten Password</Text>
         </View>
         <View style={styles.rememberViewStyle}>
