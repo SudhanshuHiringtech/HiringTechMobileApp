@@ -85,7 +85,6 @@ const ResetPasswordScreen = ({ navigation, route }) => {
 
             <Text style={styles.label}>New Password</Text>
             <View style={styles.passwordContainer}>
-                
                 <TextInput
                     value={newPassword}
                     onChangeText={(text) => {
@@ -118,7 +117,6 @@ const ResetPasswordScreen = ({ navigation, route }) => {
                     style={styles.eyeIcon}
                     onPress={() => SetShowPassword(!ShowPassword)}
                 >
-               
                     <Text> {ShowPassword?  <Icon name="eye" size={20} color="#175574" /> :   <Icon name="eye-off" size={20} color="#175574" />}</Text>
                 </TouchableOpacity>
             </View>

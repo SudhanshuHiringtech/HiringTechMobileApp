@@ -5,11 +5,16 @@ import { setProfile } from "../Reduxtoolkit/profileSlice";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, Alert } from "react-native";
 import GoogleAuth from "../Component/GoogleAuth"; // Import the GoogleAuth component
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { theme } from "./Theme";
 
 const Login = ({ route }) => {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [isGoogleAuthVisible, setIsGoogleAuthVisible] = useState(false);
+  const [ShowPassword, SetShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigation = useNavigation();
   const dispatch = useDispatch(); // Get the dispatch function
   const { item } = route?.params;
@@ -59,22 +64,36 @@ const Login = ({ route }) => {
             {item === 1 ? "Candidate Login" : "HR Login"}
           </Text>
         </View>
+        <Text style={styles.TextInputlabelStyle}>Email</Text>
         <View style={styles.emailInputViewStyle}>
-          <Text style={styles.TextInputlabelStyle}>Email</Text>
           <TextInput
             placeholder="Enter Email Address"
             onChangeText={setEmail}
             style={styles.inputStyle}
+            secureTextEntry={!showPassword}
           />
+           <TouchableOpacity
+              style={styles.eyeIcon}
+              onPress={() => setShowPassword(!showPassword)}
+            >
+            <Text> {showPassword?  <Icon name="eye" size={20} color="#175574" /> :   <Icon name="eye-off" size={20} color="#175574" />}</Text>
+            </TouchableOpacity>
         </View>
+        <Text style={styles.TextInputlabelStyle}>Password</Text>
         <View style={styles.passwordInputViewStyle}>
-          <Text style={styles.TextInputlabelStyle}>Password</Text>
-          <TextInput
-            placeholder="Enter Password"
-            secureTextEntry={true}
-            onChangeText={setPassword}
-            style={styles.inputStyle}
-          />
+            <TextInput
+              placeholder="Enter Password"
+              // secureTextEntry={true}
+              onChangeText={setPassword}
+              style={styles.inputStyle}
+              secureTextEntry={!ShowPassword}
+            />
+            <TouchableOpacity
+              style={styles.eyeIcon}
+              onPress={() => SetShowPassword(!ShowPassword)}
+            >
+            <Text> {ShowPassword?  <Icon name="eye" size={20} color="#175574" /> :   <Icon name="eye-off" size={20} color="#175574" />}</Text>
+            </TouchableOpacity>
         </View>
         <View style={styles.ForgotPassword}>
           <Text>Forgotten Password</Text>
@@ -128,18 +147,34 @@ const styles = StyleSheet.create({
     color: 'orange',
   },
   emailInputViewStyle: {
-    marginTop: 50,
-    marginHorizontal: 20,
+    marginTop: 32,
+    marginHorizontal: 15,
+    paddingHorizontal: 15,
+    marginBottom: 10,
+    borderWidth:1,
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems: 'center',
+    borderRadius: 20,
+    borderColor: 'orange',
   },
   passwordInputViewStyle: {
     marginTop: 32,
-    marginHorizontal: 20,
-  },
-  inputStyle: {
-    borderWidth: 1,
+    marginHorizontal: 15,
+    paddingHorizontal: 15,
+    marginBottom: 10,
+    borderWidth:1,
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems: 'center',
     borderRadius: 20,
     borderColor: 'orange',
-    paddingLeft: 20,
+  },
+  TextInputlabelStyle:{
+    fontSize: 16,
+    marginLeft:20,
+    marginTop:20,
+    marginBottom: -20,
   },
   ForgotPassword: {
     fontSize: 14,
@@ -209,6 +244,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: 'orange',
+    // backgroundColor:theme.primaryColor,
   },
 });
 

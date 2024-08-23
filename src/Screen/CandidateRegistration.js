@@ -444,6 +444,7 @@ import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView,
 import { useSelector, useDispatch } from 'react-redux';
 import { setProfile, selectProfile } from "../Reduxtoolkit/profileSlice";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const CandidateRegistration = () => {
     const [email, setEmail] = useState("");
@@ -451,6 +452,12 @@ const CandidateRegistration = () => {
     const [password, setPassword] = useState("");
     const [mobileNumber, setMobileNumber] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showPasswordOne, setShowPasswordone] = useState(false);
+    const [showPasswordTwo, setShowPasswordtwo] = useState(false);
+    const [showPasswordThree, setShowPasswordthree] = useState(false);
+    const [showPasswordfour, setShowPasswordfour] = useState(false);
+
     const userdesignation = "candidate";
     const navigation = useNavigation();
 
@@ -510,12 +517,20 @@ const CandidateRegistration = () => {
 
                 <View style={styles.inputContainer}>
                     <Text style={styles.label}>Full Name</Text>
+                    <View style={styles.inputWrapper}>
                     <TextInput
                         placeholder="Your Name"
                         value={name}
                         onChangeText={(text)=>{setName(text)}}
                         style={styles.input}
                     />
+                     <TouchableOpacity
+                        style={styles.eyeIcon}
+                        onPress={() => setShowPassword(!showPassword)}
+                        >
+                        <Text> {showPassword?  <Icon name="eye" size={20} color="#175574" /> :   <Icon name="eye-off" size={20} color="#175574" />}</Text>
+                     </TouchableOpacity>
+                     </View>
                 </View>
 
                 <View style={styles.inputContainer}>
@@ -527,10 +542,12 @@ const CandidateRegistration = () => {
                             onChangeText={(text)=>{setEmail(text)}}
                             style={styles.textInput}
                         />
-                        <Image
-                            source={require("../Assets/eyeoff.png")}
-                            style={styles.icon}
-                        />
+                       <TouchableOpacity
+                        style={styles.eyeIcon}
+                        onPress={() => setShowPasswordone(!showPasswordOne)}
+                        >
+                        <Text> {showPasswordOne?  <Icon name="eye" size={20} color="#175574" /> :   <Icon name="eye-off" size={20} color="#175574" />}</Text>
+                     </TouchableOpacity>
                     </View>
                 </View>
 
@@ -542,11 +559,14 @@ const CandidateRegistration = () => {
                             value={mobileNumber}
                             onChangeText={(text)=>{setMobileNumber(text)}}
                             style={styles.textInput}
+                            secureTextEntry={!showPasswordTwo}
                         />
-                        <Image
-                            source={require("../Assets/eyeoff.png")}
-                            style={styles.icon}
-                        />
+                       <TouchableOpacity
+                        style={styles.eyeIcon}
+                        onPress={() => setShowPasswordtwo(!showPasswordTwo)}
+                        >
+                        <Text> {showPasswordTwo?  <Icon name="eye" size={20} color="#175574" /> :   <Icon name="eye-off" size={20} color="#175574" />}</Text>
+                     </TouchableOpacity>
                     </View>
                 </View>
 
@@ -558,12 +578,14 @@ const CandidateRegistration = () => {
                             value={password}
                             onChangeText={(text)=>{setPassword(text)}}
                             style={styles.textInput}
-                            secureTextEntry
+                            secureTextEntry={!showPasswordThree}
                         />
-                        <Image
-                            source={require("../Assets/eyeoff.png")}
-                            style={styles.icon}
-                        />
+                       <TouchableOpacity
+                        style={styles.eyeIcon}
+                        onPress={() => setShowPasswordthree(!showPasswordThree)}
+                        >
+                        <Text> {showPasswordThree?  <Icon name="eye" size={20} color="#175574" /> :   <Icon name="eye-off" size={20} color="#175574" />}</Text>
+                     </TouchableOpacity>
                     </View>
                 </View>
 
@@ -577,10 +599,12 @@ const CandidateRegistration = () => {
                             style={styles.textInput}
                             secureTextEntry
                         />
-                        <Image
-                            source={require("../Assets/eyeoff.png")}
-                            style={styles.icon}
-                        />
+                       <TouchableOpacity
+                        style={styles.eyeIcon}
+                        onPress={() => setShowPasswordfour(!showPasswordfour)}
+                        >
+                        <Text> {showPasswordfour?  <Icon name="eye" size={20} color="#175574" /> :   <Icon name="eye-off" size={20} color="#175574" />}</Text>
+                     </TouchableOpacity>
                     </View>
                 </View>
 
@@ -644,14 +668,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '500',
         color: '#060606',
-    },
-    input: {
-        height: 50,
-        borderWidth: 1,
-        borderColor: '#9E9E9E',
-        borderRadius: 15,
-        paddingLeft: 10,
-        marginTop: 2,
     },
     inputWrapper: {
         height: 50,
