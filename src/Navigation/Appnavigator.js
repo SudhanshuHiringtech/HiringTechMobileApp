@@ -27,7 +27,7 @@ import PersonalDetails from '../Screen/ProfileSection/PersonalDetails';
 import Education from '../Screen/ProfileSection/Education';
 import WorkExperience from '../Screen/ProfileSection/WorkExperience';
 import JobDetailsScreen from '../Screen/JobDetailsScreen';
-// import ResetPassword from '../Screen/ResetPassword';
+import ResetPasswordScreen from '../Screen/ResetPasswordScreen';
 import AddComplaintScreen from '../Screen/AddComplaintScreen';
 import ComplaintRegisterScreen from '../Screen/ComplaintRegisterScreen';
 import CreateJobScreen1 from '../Screen/HRJobCreateSection/CreateJobScreen1';
@@ -43,6 +43,8 @@ import Candidates from '../../HRScreens/Candidates';
 import forgotePassword from '../Screen/forgotePassword';
 import Notifications from '../Screen/Notification';
 import ChangePasswordScreen from '../Screen/ChangePasswordScreen';
+import DeleteAcoount from '../Component/DeleteAcoountScreen';
+import DeActivate from '../Component/DeActivate';
 
 const Stack = createNativeStackNavigator();
 
@@ -92,7 +94,10 @@ const AppNavigator = ()=> {
       <Stack.Screen name="Candidate" component={Candidates} />
       <Stack.Screen name="Notifications" component={Notifications} />
       <Stack.Screen name="forgotePassword" component={forgotePassword} />
-      {/* <Stack.Screen name="ResetPassword" component={ResetPassword} /> */}
+
+      <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+      <Stack.Screen name="DeleteAcoount" component={DeleteAcoount} />
+      <Stack.Screen name="DeActivate" component={DeActivate} />
       </Stack.Navigator>
   )
 
