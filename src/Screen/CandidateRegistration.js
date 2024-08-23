@@ -452,9 +452,6 @@ const CandidateRegistration = () => {
     const [password, setPassword] = useState("");
     const [mobileNumber, setMobileNumber] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
-    const [showPasswordOne, setShowPasswordone] = useState(false);
-    const [showPasswordTwo, setShowPasswordtwo] = useState(false);
     const [showPasswordThree, setShowPasswordthree] = useState(false);
     const [showPasswordfour, setShowPasswordfour] = useState(false);
 
@@ -524,12 +521,6 @@ const CandidateRegistration = () => {
                         onChangeText={(text)=>{setName(text)}}
                         style={styles.input}
                     />
-                     <TouchableOpacity
-                        style={styles.eyeIcon}
-                        onPress={() => setShowPassword(!showPassword)}
-                        >
-                        <Text> {showPassword?  <Icon name="eye" size={20} color="#175574" /> :   <Icon name="eye-off" size={20} color="#175574" />}</Text>
-                     </TouchableOpacity>
                      </View>
                 </View>
 
@@ -542,12 +533,6 @@ const CandidateRegistration = () => {
                             onChangeText={(text)=>{setEmail(text)}}
                             style={styles.textInput}
                         />
-                       <TouchableOpacity
-                        style={styles.eyeIcon}
-                        onPress={() => setShowPasswordone(!showPasswordOne)}
-                        >
-                        <Text> {showPasswordOne?  <Icon name="eye" size={20} color="#175574" /> :   <Icon name="eye-off" size={20} color="#175574" />}</Text>
-                     </TouchableOpacity>
                     </View>
                 </View>
 
@@ -559,14 +544,7 @@ const CandidateRegistration = () => {
                             value={mobileNumber}
                             onChangeText={(text)=>{setMobileNumber(text)}}
                             style={styles.textInput}
-                            secureTextEntry={!showPasswordTwo}
                         />
-                       <TouchableOpacity
-                        style={styles.eyeIcon}
-                        onPress={() => setShowPasswordtwo(!showPasswordTwo)}
-                        >
-                        <Text> {showPasswordTwo?  <Icon name="eye" size={20} color="#175574" /> :   <Icon name="eye-off" size={20} color="#175574" />}</Text>
-                     </TouchableOpacity>
                     </View>
                 </View>
 
@@ -597,9 +575,9 @@ const CandidateRegistration = () => {
                             value={confirmPassword}
                             onChangeText={(text)=>{setConfirmPassword(text)}}
                             style={styles.textInput}
-                            secureTextEntry
+                            secureTextEntry={!showPasswordfour}
                         />
-                       <TouchableOpacity
+                       <TouchableOpacity 
                         style={styles.eyeIcon}
                         onPress={() => setShowPasswordfour(!showPasswordfour)}
                         >
@@ -672,11 +650,10 @@ const styles = StyleSheet.create({
     inputWrapper: {
         height: 50,
         borderWidth: 1,
-        borderColor: '#9E9E9E',
+        // borderColor: '#9E9E9E',
         borderRadius: 15,
         marginTop: 2,
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
     },
     textInput: {
@@ -741,6 +718,9 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: 'orange',
         marginLeft: 6,
+    },
+    eyeIcon:{
+        marginRight:20,
     },
 });
 

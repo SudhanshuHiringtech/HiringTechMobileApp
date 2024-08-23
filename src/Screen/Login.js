@@ -13,7 +13,6 @@ const Login = ({ route }) => {
   const [Password, setPassword] = useState("");
   const [isGoogleAuthVisible, setIsGoogleAuthVisible] = useState(false);
   const [ShowPassword, SetShowPassword] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
   const navigation = useNavigation();
   const dispatch = useDispatch(); // Get the dispatch function
@@ -70,14 +69,7 @@ const Login = ({ route }) => {
             placeholder="Enter Email Address"
             onChangeText={setEmail}
             style={styles.inputStyle}
-            secureTextEntry={!showPassword}
           />
-           <TouchableOpacity
-              style={styles.eyeIcon}
-              onPress={() => setShowPassword(!showPassword)}
-            >
-            <Text> {showPassword?  <Icon name="eye" size={20} color="#175574" /> :   <Icon name="eye-off" size={20} color="#175574" />}</Text>
-            </TouchableOpacity>
         </View>
         <Text style={styles.TextInputlabelStyle}>Password</Text>
         <View style={styles.passwordInputViewStyle}>

@@ -10,6 +10,7 @@ import {
   Alert,
   ScrollView,
 } from "react-native";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const HrRegistration = () => {
     const [name, setName] = useState("");
@@ -19,6 +20,9 @@ const HrRegistration = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPasswordThree, setShowPasswordthree] = useState(false);
+    const [showPasswordfour, setShowPasswordfour] = useState(false);
+
   const navigation = useNavigation();
 
   const userdesignation = "recuriter";
@@ -141,10 +145,6 @@ const HrRegistration = () => {
               onChangeText={(text) => setMobileNumber(text)}
               style={styles.textInput}
             />
-            <Image
-              source={require("../Assets/eyeoff.png")}
-              style={styles.icon}
-            />
           </View>
         </View>
 
@@ -166,10 +166,6 @@ const HrRegistration = () => {
               onChangeText={(text) => setEmail(text)}
               style={styles.textInput}
             />
-            <Image
-              source={require("../Assets/eyeoff.png")}
-              style={styles.icon}
-            />
           </View>
         </View>
 
@@ -181,11 +177,15 @@ const HrRegistration = () => {
               value={password}
               onChangeText={(text) => setPassword(text)}
               style={styles.textInput}
+              secureTextEntry={!showPasswordThree}
+
             />
-            <Image
-              source={require("../Assets/eyeoff.png")}
-              style={styles.icon}
-            />
+            <TouchableOpacity
+                        style={styles.eyeIcon}
+                        onPress={() => setShowPasswordthree(!showPasswordThree)}
+                        >
+                        <Text> {showPasswordThree?  <Icon name="eye" size={20} color="#175574" /> :   <Icon name="eye-off" size={20} color="#175574" />}</Text>
+             </TouchableOpacity>
           </View>
         </View>
 
@@ -197,11 +197,15 @@ const HrRegistration = () => {
               value={confirmPassword}
               onChangeText={(text) => setConfirmPassword(text)}
               style={styles.textInput}
+              secureTextEntry={!showPasswordfour}
+
             />
-            <Image
-              source={require("../Assets/eyeoff.png")}
-              style={styles.icon}
-            />
+            <TouchableOpacity 
+                        style={styles.eyeIcon}
+                        onPress={() => setShowPasswordfour(!showPasswordfour)}
+                        >
+                        <Text> {showPasswordfour?  <Icon name="eye" size={20} color="#175574" /> :   <Icon name="eye-off" size={20} color="#175574" />}</Text>
+               </TouchableOpacity>
           </View>
         </View>
 
@@ -294,13 +298,15 @@ const styles = StyleSheet.create({
   },
   textInputWrapper: {
     height: 50,
-    width:'90%',
     borderRadius: 15,
     marginTop: 2,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  eyeIcon:{
+marginLeft:-40,    
+},
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -363,6 +369,7 @@ const styles = StyleSheet.create({
     color: 'orange',
     marginLeft: 10,
   },
+
 });
 
 export default HrRegistration;
