@@ -94,10 +94,10 @@ const AppNavigator = ()=> {
       <Stack.Screen name="Candidate" component={Candidates} />
       <Stack.Screen name="Notifications" component={Notifications} />
       <Stack.Screen name="forgotePassword" component={forgotePassword} />
+
       <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
       <Stack.Screen name="DeleteAcoount" component={DeleteAcoount} />
       <Stack.Screen name="DeActivate" component={DeActivate} />
-
       </Stack.Navigator>
   )
 
