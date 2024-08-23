@@ -27,7 +27,7 @@ import PersonalDetails from '../Screen/ProfileSection/PersonalDetails';
 import Education from '../Screen/ProfileSection/Education';
 import WorkExperience from '../Screen/ProfileSection/WorkExperience';
 import JobDetailsScreen from '../Screen/JobDetailsScreen';
-import ResetPassword from '../Screen/ResetPassword';
+// import ResetPassword from '../Screen/ResetPassword';
 import AddComplaintScreen from '../Screen/AddComplaintScreen';
 import ComplaintRegisterScreen from '../Screen/ComplaintRegisterScreen';
 import CreateJobScreen1 from '../Screen/HRJobCreateSection/CreateJobScreen1';
@@ -92,7 +92,7 @@ const AppNavigator = ()=> {
       <Stack.Screen name="Candidate" component={Candidates} />
       <Stack.Screen name="Notifications" component={Notifications} />
       <Stack.Screen name="forgotePassword" component={forgotePassword} />
-      <Stack.Screen name="ResetPassword" component={ResetPassword} />
+      {/* <Stack.Screen name="ResetPassword" component={ResetPassword} /> */}
       </Stack.Navigator>
   )
 
