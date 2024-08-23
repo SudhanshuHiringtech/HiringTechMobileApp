@@ -650,7 +650,7 @@ const styles = StyleSheet.create({
     inputWrapper: {
         height: 50,
         borderWidth: 1,
-        // borderColor: '#9E9E9E',
+        borderColor: '#9E9E9E',
         borderRadius: 15,
         marginTop: 2,
         flexDirection: 'row',
