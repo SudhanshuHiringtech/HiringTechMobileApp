@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { selectProfile } from "../Reduxtoolkit/profileSlice";
 
 const DeActivate = ({ navigation }) => {
-  const [Password, setPassword] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const profile = useSelector(selectProfile);
   const name = profile?.profile?.user?.name;
@@ -15,7 +15,7 @@ const DeActivate = ({ navigation }) => {
 console.log(userId, "user ID");
 
 const handleDeleteAccount = async () => {
-    if (!Password.trim()) {
+    if (!password.trim()) {
       Alert.alert('Error', 'Please enter your password');
       return;
     }
@@ -26,13 +26,13 @@ const handleDeleteAccount = async () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ Password }),
+        body: JSON.stringify({ password }),
       });
   
       console.log(response, 'response here')
-      // if (!response.ok) {
-      //   throw new Error(`HTTP error! status: ${response.status}`);
-      // }
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
   
       const data = await response.json();
       console.log(data, "data text");
@@ -70,7 +70,7 @@ const handleDeleteAccount = async () => {
       <Text style={styles.feedbackPrompt}>Enter Password</Text>
       <View style={styles.passwordContainer}>
         <TextInput
-          value={Password}
+          value={password}
           onChangeText={(text) => setPassword(text)}
           style={styles.input}
           placeholder="Enter Password"
