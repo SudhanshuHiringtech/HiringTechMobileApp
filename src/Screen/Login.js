@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, Alert } from "react-native";
 import GoogleAuth from "../Component/GoogleAuth"; // Import the GoogleAuth component
 import { theme, Theme } from './Theme'
+
 const Login = ({ route }) => {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
