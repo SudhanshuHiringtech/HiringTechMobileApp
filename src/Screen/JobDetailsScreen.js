@@ -137,7 +137,7 @@ const JobDetailsScreen = ({ route, navigation }) => {
 
   const ApplyforJob = async () => {
     try {
-      const response = await fetch('http://192.168.29.188:5000/apply-job', {
+      const response = await fetch('http://192.168.29.188:5000/job-post/apply-job', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -153,8 +153,8 @@ const JobDetailsScreen = ({ route, navigation }) => {
           coverLetter: "I am excited to apply for the React Native Developer Engineer position..."
         }),
       });
-
       const data = await response.json();
+       console.log(data);
       if (response.ok) {
         Alert.alert('Applied Successful');
         setIsButtonDisabled(true);

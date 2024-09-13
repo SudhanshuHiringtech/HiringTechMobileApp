@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setProfile, selectProfile } from "../../Reduxtoolkit/profileSlice";
 
 
-const socket = io('https://hiringtechb-2.onrender.com');
+const socket = io('http://192.168.29.188:5000/chat');
 
 const ChatScreen = ({route}) => {
 
@@ -42,7 +42,7 @@ const ChatScreen = ({route}) => {
     console.log("dekho ", data)
   if(InviteAPI == true){
     try {
-      const response = await fetch('hhttps://hiringtechb-2.onrender.com/invited-people', {
+      const response = await fetch('http://192.168.29.188:5000/invited-people', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -65,7 +65,7 @@ const ChatScreen = ({route}) => {
   const markMessageAsRead = async (messageId) => {
     console.log("fvdz")
     try {
-      const response = await fetch(`https://hiringtechb-2.onrender.com/messages/${messageId}/read`, {
+      const response = await fetch(`http://192.168.29.188:5000/messages/${messageId}/read`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ const ChatScreen = ({route}) => {
 
     const fetchChatHistory = async () => {
       try {
-        const response = await axios.get(`https://hiringtechb-2.onrender.com/history/${senderId}/${receiverId}`);
+        const response = await axios.get(`http://192.168.29.188:5000/history/${senderId}/${receiverId}`);
         setMessages(response.data);
       } catch (error) {
         console.error('Failed to fetch chat history:', error);
@@ -107,8 +107,11 @@ const ChatScreen = ({route}) => {
 
     fetchChatHistory();
 
-    socket.emit('joinRoom', receiverId, { senderId, receiverId });
-
+    if(socket.emit('joinRoom', receiverId, { senderId, receiverId })){
+      console.log("dekhte hai")
+    };
+    console.log("dekhte hai s", senderId, receiverId)
+   
     socket.on('receiveMessage', (newMessage) => {
       setMessages((prevMessages) => [...prevMessages, newMessage]);
     });
@@ -138,10 +141,12 @@ const ChatScreen = ({route}) => {
       console.error('Sender ID or Receiver ID is not defined');
       return;
     }
-
+  console.log('message aa gya')
     if (message.trim() !== '') {
+      console.log("dfzvfd")
       const newMessage = { senderId: senderId, receiverId: receiverId, message, createdAt: new Date() };
       //setMessages((prevMessages) => [...prevMessages, newMessage]);
+     // console.log(message)
       socket.emit('sendMessage', newMessage);
       setMessage('');
       scrollViewRef.current?.scrollToEnd({ animated: true }); // Scroll to end after sending message

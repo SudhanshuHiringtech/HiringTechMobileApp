@@ -261,8 +261,8 @@ const Messages = ({ navigation }) => {
   useEffect(() => {
     if (userId) {
       const url = filter === 'all'
-        ? `https://hiringtechb-2.onrender.com/unique-messagers/${userId}`
-        : `https://hiringtechb-2.onrender.com/unread-messages/${userId}`;
+        ? `http://192.168.29.188:5000/unique-messagers/${userId}`
+        : `http://192.168.29.188:5000/unread-messages/${userId}`;
 
       fetchMessages(url);
     }
@@ -301,7 +301,7 @@ const Messages = ({ navigation }) => {
         </View>
         </View>
         <View>
-        <Text style={[styles.message, isUnread && styles.unreadMessage]}>{truncateMessage(item.latestMessage.message, 10)}</Text>
+        <Text style={[styles.message, isUnread && styles.unreadMessage]}>{truncateMessage(item.latestMessage.message, 9)}</Text>
         </View>
        <View style={{alignItems:'flex-end',}}>
         <Text style={styles.timestamp}>{new Date(item.latestMessage.timestamp).toLocaleString()}</Text>
@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderWidth: 0.8,
     borderRadius: 25,
-    height:100,
+    height:120,
     borderColor:'grey',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

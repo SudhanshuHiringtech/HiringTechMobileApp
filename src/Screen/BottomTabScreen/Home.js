@@ -63,7 +63,7 @@ const Home = () => {
 
     const fetchJobs = async () => {
         try {
-            const response = await fetch("https://hiringtechb-2.onrender.com/getalljobs");
+            const response = await fetch("https://hiringtechb-1.onrender.com/getalljobs");
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
